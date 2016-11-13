@@ -48,7 +48,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 passport.use(new GoogleStrategy({
         clientID: '702764497550-9dt3j01t9pdt0jqfhf44e3f0pcijo5cn.apps.googleusercontent.com',
         clientSecret: '18Rk68ZMTdzrAsOgUemnmbL-',
-        callbackURL: "http://localhost:8080/userLoginCallback",
+        callbackURL: "https://calm-peak-81595.herokuapp.com/userLoginCallback",
         passReqToCallback: true
     },
     function(request, accessToken, refreshToken, profile, done) {
