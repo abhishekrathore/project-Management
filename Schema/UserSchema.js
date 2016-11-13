@@ -3,33 +3,27 @@ var mongoose = require("mongoose"),
     UserSchema = mongoose.Schema({
         name: {
             type: String,
-            required: true,
-            index: true
+            required: true
         },
         useremail: {
             type: String,
             unique: true,
-            required: true,
-            index: true
+            required: true
         },
         userrole: {
             type: String,
-            required: true,
-            index: true
+            default : 'Developer'
         },
         accessflag: {
             type: Boolean,
-            required: true,
-            index: true
+            default : false
         },
         deleteflag: {
             type: Boolean,
-            index: true
+            default : false
         }
     }, {
-        timestamps: {
-            createdAt: 'created_at'
-        }
+        timestamps: true
     });
 // Export User Schema
 module.exports = UserSchema;

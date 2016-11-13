@@ -2,6 +2,7 @@ var express = require('express'), // require express code
     bodyParser = require('body-parser'), // require body-parser code
     common = require('./common'), // require common file code
     UserController = require('./Controller/UserController'), // require Controller code code
+    ProjectController = require('./Controller/ProjectController'), // require Controller code code
     session = require('express-session'), // require express-session code
     passport = require('passport'), // require passport js code code
     multer = require('multer'), // require multer code
@@ -56,20 +57,23 @@ passport.use(new GoogleStrategy({
 ));
 // passport serialize user
 passport.serializeUser(function(user, done) {
+    console.log('serializeUser')
     done(null, user.id);
 });
 // passport deserialize user
 passport.deserializeUser(function(id, done) {
+    console.log('deserializeUser')
     // here serializeUser done function second arg is same to deserializeUser function first arg (id = user)
     done(null, id);
 });
-// Get Dummy Api for find user
-app.get('/users', UserController.findUser);
+// User Apis
 app.get('/userLogin', passport.authenticate('google', {
     scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read']
 }));
 app.get('/userLoginCallback', passport.authenticate('google'), UserController.insertUpsertUser);
-app.post('/createAproject', passport.authenticate('google'), ProjectController.createAproject);
+app.get('/getUserWithoutAccess', isAuthenticate, UserController.getUserWithoutAccess);
+// Project Apis
+app.post('/createNewProject', isAuthenticate, ProjectController.createNewProject);
 // Post Dummy Api for file Upload
 app.post('/upload', isAuthenticate, upload.single('logo'), function(req, res) {
     console.log(req.file);
@@ -81,6 +85,7 @@ app.listen(PORT, function() {
 });
 
 function isAuthenticate(req, res, done) {
-    if (req.user) done()
-    else res.send("Not Logged in")
+     done();
+    // if (req.user) done()
+    // else res.send("Not Logged in")
 }

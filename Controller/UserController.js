@@ -2,11 +2,10 @@ Users = require("../Model/User"); // Require User Molel file
 //Q = require("q");
 // Make a function for find user by querry
 function _getUserWithoutAccess(req, res) {
-    // for get query string from url api
-    var query = req.query;
     // search functionlity work on only on model not document
     // find for all / findOne for only for one record
-    Users.find(query, function(err, docs) {
+    var findObj = {accessflag : false ,  userrole : {$nin : 'Admin'}};
+    Users.find(findObj, function(err, docs) {
         if (err) throw err;
         res.send(docs);
     });
@@ -20,15 +19,14 @@ function _insertUpsertUser(req, res) {
         if (!doc) {
             var saveUser = new Users({
                 name: req.user.displayName,
-                useremail: req.user.emails[0].value,
-                userrole: 'Developer',
-                accessflag: false,
-                deleteflag: false
+                useremail: req.user.emails[0].value
             });
             saveUser.save(function(err, doc) {
                 if (err) throw err
                 else res.send(doc);
             });
+        } else {
+            res.send(doc);
         }
     });
 }
