@@ -1,0 +1,41 @@
+<link href="/css/projectPanel.css" rel="stylesheet">
+<div class="header">
+     <div class="container">
+        <div class="row">
+           <div class="col-md-5">
+              <div class="logo">
+                 <h1><a href="#">Project Panel</a></h1>
+              </div>
+           </div>
+           <div class="col-md-2" style="float:right;">
+              <div class="navbar navbar-inverse" role="banner">
+                  <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
+                    <ul class="nav navbar-nav">
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
+                        <ul class="dropdown-menu animated fadeInUp">
+                          <li><a href="login.html">Logout</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </nav>
+              </div>
+           </div>
+        </div>
+     </div>
+</div>
+<div class="page-content">
+  <md-button class="md-raised md-primary">Add Project</md-button>
+  <div flex-gt-sm="50" flex>
+    <md-content>
+       <md-list flex>
+          <md-list-item class="md-3-line" ng-repeat="project in projectDataSource" ng-click="null">
+              <img ng-src="images/icons/ic_insert_drive_file_24px.svg" class="md-avatar" alt="{{project.name}}" />
+              <div class="md-list-item-text" layout="column">
+                <h3>{{ project.name }}</h3>
+              </div>
+          </md-list-item>
+        </md-list>
+      </md-content>
+  </div>
+</div>

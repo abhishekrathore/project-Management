@@ -1,0 +1,1 @@
+angular.module('projectDev', ['ngRoute','ngMaterial', 'ui-notification']);
