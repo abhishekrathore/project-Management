@@ -3,18 +3,30 @@ var express = require('express'), // require express code
     common = require('./common'), // require common file code
     UserController = require('./Controller/UserController'), // require Controller code code
     ProjectController = require('./Controller/ProjectController'), // require Controller code code
+    DocumentController = require('./Controller/DocumentController'), // require Controller code code
     session = require('express-session'), // require express-session code
     passport = require('passport'), // require passport js code code
     multer = require('multer'), // require multer code
-    upload = multer({
-        dest: 'images/'
-    }),
     // install npm install passport-local --save (for install local strategy)
     LocalStrategy = require('passport-local').Strategy,
     PORT = process.env.PORT || 8080,
     // install npm install passport-google-oauth2 --save (for install Google strategy)
     // Need to Create A app on https://console.cloud.google.com/
     GoogleStrategy = require('passport-google-oauth20').Strategy,
+    storage = multer.diskStorage({
+        destination: function(req, file, cb) {
+            var docPath = process.env.IMAGE_PATH || './images/';
+            cb(null, docPath)
+        },
+        filename: function(req, file, cb) {
+            var type = file.mimetype.split('/');
+            cb(null, Date.now() + '.' + type[type.length - 1]);
+        }
+    })
+upload = multer({
+        storage: storage
+    }),
+
     app = express(); // initilize exporess in app variable
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -48,7 +60,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 passport.use(new GoogleStrategy({
         clientID: '702764497550-9dt3j01t9pdt0jqfhf44e3f0pcijo5cn.apps.googleusercontent.com',
         clientSecret: '18Rk68ZMTdzrAsOgUemnmbL-',
-        callbackURL: process.env.GOOGLE-CB || "http://localhost:8080/userLoginCallback",
+        callbackURL: process.env.GOOGLE_CB || "http://localhost:8080/userLoginCallback",
         passReqToCallback: true
     },
     function(request, accessToken, refreshToken, profile, done) {
@@ -63,7 +75,7 @@ passport.serializeUser(function(user, done) {
 // passport deserialize user
 passport.deserializeUser(function(id, done) {
     console.log('deserializeUser')
-    // here serializeUser done function second arg is same to deserializeUser function first arg (id = user)
+        // here serializeUser done function second arg is same to deserializeUser function first arg (id = user)
     done(null, id);
 });
 // User Apis
@@ -72,20 +84,25 @@ app.get('/userLogin', passport.authenticate('google', {
 }));
 app.get('/userLoginCallback', passport.authenticate('google'), UserController.insertUpsertUser);
 app.get('/getUserWithoutAccess', isAuthenticate, UserController.getUserWithoutAccess);
+app.get('/giveAccessToUser', isAuthenticate, UserController.giveAccessToUser);
+app.get('/getDeveloperList', isAuthenticate, UserController.getDeveloperList);
 // Project Apis
 app.post('/createNewProject', isAuthenticate, ProjectController.createNewProject);
 // Post Dummy Api for file Upload
-app.post('/upload', isAuthenticate, upload.single('logo'), function(req, res) {
-    console.log(req.file);
-});
-
+app.post('/uploadLogo', isAuthenticate, upload.single('logo'), DocumentController.uploadDocument);
+// Post Dummy Api for file Upload
+app.post('/uploadDocs', isAuthenticate, upload.array('docs', 4), DocumentController.uploadDocument);
+app.get('/deleteDocument', isAuthenticate, DocumentController.deleteDocument);
+app.get('/files/:filename', isAuthenticate, DocumentController.getDocument);
+app.get('/getProjectDetailByProjectId/:id', isAuthenticate, ProjectController.getProjectDetailByProjectId);
+app.put('/editProjectDetail/:id', isAuthenticate, ProjectController.editProjectDetail);
 // For Check Start Server function
 app.listen(PORT, function() {
     console.log('Server Started In Rest Api on port ' + PORT);
 });
 
 function isAuthenticate(req, res, done) {
-     done();
+    done();
     // if (req.user) done()
     // else res.send("Not Logged in")
 }

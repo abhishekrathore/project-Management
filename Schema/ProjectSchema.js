@@ -33,15 +33,13 @@ var mongoose = require("mongoose"),
         },
         developers: [{
             type: Schema.Types.ObjectId,
-            required: [true, 'Developers is require']
-         //   ref: 'User'
+            required: [true, 'Developers is require'],
+            ref: 'User'
         }],
-        documents: {
-            type: Array
-        },
         logoImageId: {
-            type: Number,
-            default: 1
+            type: Schema.Types.ObjectId,
+            default: null,
+            ref: 'Document'
         },
         version: {
             type: Number,
