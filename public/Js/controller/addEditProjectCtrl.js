@@ -1,8 +1,8 @@
 angular.module('projectDev')
     .controller('addEditProjectCtrl', addEditProjectCtrl);
-addEditProjectCtrl.$inject = ['$scope', 'serverRequestService', 'Upload', 'Notification', '$mdDialog', '$q'];
+addEditProjectCtrl.$inject = ['$scope', 'serverRequestService', 'Upload', 'Notification', '$mdDialog', '$q', 'items'];
 // Project Dev Controller
-function addEditProjectCtrl($scope, serverRequestService, Upload, Notification, $mdDialog, $q) {
+function addEditProjectCtrl($scope, serverRequestService, Upload, Notification, $mdDialog, $q, items) {
     var _THIS = this;
     $scope.project = {};
     $scope.deleteLogoFlag =true;
@@ -17,15 +17,21 @@ function addEditProjectCtrl($scope, serverRequestService, Upload, Notification, 
     $scope.uploadDocs = _uploadDocs;
     $scope.getDocument = _getDocument;
     $scope.uploadLogo = _uploadLogo;
+    $scope.addEditButtonFlag = false;
+    $scope.editProjectDetail = _editProjectDetail;
     function _fillProjectDetail () {
-        var id = "583017308f9d8f11d4bb52d0";
-        serverRequestService.serverRequest('getProjectDetailByProjectId/'+ id, 'GET').then(_getProjectDetail);
+        if(items) {
+            $scope.addEditButtonFlag = true;
+            serverRequestService.serverRequest('getProjectDetailByProjectId/'+ items, 'GET').then(_getProjectDetail);
+        }
     }
     _fillProjectDetail();
     function _getProjectDetail (res) {
         $scope.project = res.result;
         $scope.project.startdateCn =  new Date(res.result.startdate);
         $scope.project.enddateCn = new Date(res.result.enddate);
+        $scope.projectForm.$setUntouched();
+        $scope.projectForm.$setPristine();
     }
     // Upload Logo function for click
     function _uploadLogo() {
@@ -77,7 +83,7 @@ function addEditProjectCtrl($scope, serverRequestService, Upload, Notification, 
                 $scope.submitDisable = false;
                 defer.resolve({
                     fileObj: {
-                        docPath: res.data.result.path,
+                        docPath: res.data.result.absolutePath,
                         docName: res.data.result.filename,
                         originalname : res.data.result.originalname
                     }
@@ -86,7 +92,7 @@ function addEditProjectCtrl($scope, serverRequestService, Upload, Notification, 
                 $scope.submitDisable = false;
                 serverRequestService.serverError(res);
                 defer.resolve({
-                    fileObj: {}
+                    fileObj: null
                 });
             }, function(evt) {
                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -100,16 +106,16 @@ function addEditProjectCtrl($scope, serverRequestService, Upload, Notification, 
     function _deleteLogo() {
         if ($scope.project.logoImageId.docName) {
             $scope.deleteLogoFlag = false;
-            _deleteDocument($scope.project.logoImageId.docName).then(function(){
-                $scope.project.logoImageId = {}
+            _deleteDocument($scope.project.logoImageId.docName, $scope.project.logoImageId._id).then(function(){
+                $scope.project.logoImageId = null;
                 $scope.deleteLogoFlag = true;
             });
         }
     }
     // Delete Selected Doc
-    function _deleteDocument(selectedName) {
+    function _deleteDocument(selectedName, id) {
         var defer = $q.defer();
-        var url = 'deleteDocument?name=' + selectedName;
+        var url = 'deleteDocument?name=' + selectedName + '&id=' + id;
         var deleteDocumentReq = serverRequestService.serverRequest(url, 'GET').then(function(res) {
             defer.resolve(res);
         },function(res){
@@ -126,12 +132,33 @@ function addEditProjectCtrl($scope, serverRequestService, Upload, Notification, 
         });
     }
     // Save Project Detail in DB
-    function _saveProjectDetail(argument) {
+    function _saveProjectDetail() {
         if ($scope.projectForm.$valid) {
             $scope.project.startdate = $scope.project.startdateCn;
             $scope.project.enddate = $scope.project.enddateCn;
             serverRequestService.serverRequest('createNewProject', 'POST', $scope.project).then(function(res) {
                 _showNotification('success', 'Porject Save successfully', 'Save', 2000);
+                $mdDialog.cancel();
+            },function(res){
+                angular.forEach(res.result.errors, function(value){
+                    _showNotification('error',value.message, value.path, 4000);
+                });
+            });
+        } else {
+            $scope.projectForm.$setSubmitted();
+        }
+    }
+
+    // Edit Project Detail in DB 
+    function  _editProjectDetail() {
+        var uploadObj = {};
+        if ($scope.projectForm.$valid) {
+            $scope.project.startdate = $scope.project.startdateCn;
+            $scope.project.enddate = $scope.project.enddateCn;
+            $scope.project.logoImageIdNew = angular.copy($scope.project.logoImageId);
+            $scope.project.logoImageId = undefined;
+            serverRequestService.serverRequest('editProjectDetail/' + items, 'PUT', $scope.project).then(function(res) {
+                _showNotification('success', 'Porject Update successfully', 'Update', 2000);
                 $mdDialog.cancel();
             },function(res){
                 angular.forEach(res.result.errors, function(value){

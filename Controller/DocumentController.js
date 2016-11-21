@@ -1,5 +1,6 @@
 Document = require("../Model/Document"); // Require User Molel file
 var file = require('file-system'),
+    path = require('path'),
     fs = require('fs'),
     resultObj = {
         status: ''
@@ -44,6 +45,8 @@ function _insertDocument(projectDoc, res) {
 // Upload Doc at Server
 function _uploadDocument(req, res) {
     if (req && req.file) {
+        var absolutePath  = path.join(path.dirname(require.main.filename),req.file.path)
+        req.file.absolutePath = absolutePath;
         resultObj.status = OK;
         resultObj.result = req.file;
     } else {
@@ -55,14 +58,16 @@ function _uploadDocument(req, res) {
 
 // Get Document 
 function _getDocument(req, res) {
-    fs.readFile('images/'+ req.params.filename , function(err, data) {
-        if(err) {
+    console.log(req.params)
+    fs.readFile('images/' + req.params.filename, function(err, data) {
+        if (err) {
             resultObj.status = FAIL;
-        resultObj.result = err;
+            resultObj.result = err;
         } else {
             resultObj.status = OK;
             resultObj.result = data;
         }
+        console.log(resultObj)
         res.send(resultObj);
     });
 }
@@ -83,9 +88,7 @@ function _deleteDocument(req, res) {
                         resultObj.result = req.err;
                         res.send(resultObj);
                     } else {
-                        resultObj.status = OK;
-                        resultObj.result = 'file deleted successfully';
-                        res.send(resultObj);
+                        _updateDocCollection(req, res)
                     }
                 });
             }
@@ -96,11 +99,23 @@ function _deleteDocument(req, res) {
         res.send(resultObj);
     }
 }
+
+function _updateDocCollection(req, res) {
+    resultObj.status = OK;
+    resultObj.result = 'file deleted successfully';
+    if(req.query.id) {
+        Document.findOneAndRemove({_id: req.query.id}, function(err, docs){
+            res.send(resultObj);
+        });
+    } else {
+        res.send(resultObj);
+    }
+}
 // Export Methodz
 module.exports = {
     getDocumentByProjectId: _getDocumentByProjectId,
     insertDocument: _insertDocument,
     uploadDocument: _uploadDocument,
     deleteDocument: _deleteDocument,
-    getDocument : _getDocument
+    getDocument: _getDocument
 };

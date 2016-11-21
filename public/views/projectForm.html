@@ -32,7 +32,7 @@
                     </md-input-container>
                     <md-input-container style="width: 210px;">
                         <label for="projectPrority">Project Prority</label>
-                        <md-select ng-model="project.projectPrority"
+                        <md-select name="projectPrority" ng-model="project.projectPrority"
                                md-on-close=""
                                data-md-container-class="selectdemoSelectHeader"
                                >
@@ -47,7 +47,7 @@
                 <div style="width: 292px;">
                     <md-input-container style="width: 292px;">
                         <label for="developers">Select Dev</label>
-                        <md-select ng-model="project.developers"
+                        <md-select name="developers" ng-model="project.developers"
                                md-on-close=""
                                data-md-container-class="selectdemoSelectHeader"
                                multiple>
@@ -62,7 +62,7 @@
                         Upload Logo
                       </md-tooltip>
                     </md-button>
-                    <md-button ng-click ="getDocument(project.logoImageId.docName)" ng-if="project.logoImageId.docName" flex>{{project.logoImageId.docName}}</md-button>
+                    <a  href="{{project.logoImageId.docPath}}" target="_blank" ng-if="project.logoImageId.docName" flex>{{project.logoImageId.docName}}</a>
                     <md-button ng-if="project.logoImageId.docName" ng-disabled = "!deleteLogoFlag" class="md-icon-button" ng-click="deleteLogo()">
                       <md-icon md-svg-src="images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
                     </md-button>
@@ -85,7 +85,8 @@
                             <md-radio-button value="docs-dark"> Docs dark </md-radio-button>
                         </md-radio-group>
                     </md-input-container>
-                    <md-button class="md-raised md-primary" ng-disabled = "submitDisable" ng-click="createEditProject()">Create</md-button>
+                    <md-button class="md-raised md-primary" ng-if="!addEditButtonFlag" ng-disabled = "submitDisable" ng-click="createEditProject()">Create</md-button>
+                    <md-button class="md-raised md-primary" ng-if="addEditButtonFlag" ng-disabled = "submitDisable" ng-click="editProjectDetail()">Edit</md-button>
                 </div>
       </md-content>
 </form>

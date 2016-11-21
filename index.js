@@ -88,20 +88,23 @@ app.get('/giveAccessToUser', isAuthenticate, UserController.giveAccessToUser);
 app.get('/getDeveloperList', isAuthenticate, UserController.getDeveloperList);
 // Project Apis
 app.post('/createNewProject', isAuthenticate, ProjectController.createNewProject);
-// Post Dummy Api for file Upload
+// Post  Api for file Logo Upload
 app.post('/uploadLogo', isAuthenticate, upload.single('logo'), DocumentController.uploadDocument);
-// Post Dummy Api for file Upload
+// Post  Api for file Upload
 app.post('/uploadDocs', isAuthenticate, upload.array('docs', 4), DocumentController.uploadDocument);
 app.get('/deleteDocument', isAuthenticate, DocumentController.deleteDocument);
 app.get('/files/:filename', isAuthenticate, DocumentController.getDocument);
 app.get('/getProjectDetailByProjectId/:id', isAuthenticate, ProjectController.getProjectDetailByProjectId);
 app.put('/editProjectDetail/:id', isAuthenticate, ProjectController.editProjectDetail);
+app.get('/getActiveProject', isAuthenticate, ProjectController.getActiveProject);
+
 // For Check Start Server function
 app.listen(PORT, function() {
     console.log('Server Started In Rest Api on port ' + PORT);
 });
 
 function isAuthenticate(req, res, done) {
+    console.log(req.user)
     done();
     // if (req.user) done()
     // else res.send("Not Logged in")

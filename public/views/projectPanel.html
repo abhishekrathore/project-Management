@@ -1,41 +1,44 @@
-<link href="/css/projectPanel.css" rel="stylesheet">
-<div class="header">
-     <div class="container">
-        <div class="row">
-           <div class="col-md-5">
-              <div class="logo">
-                 <h1><a href="#">Project Panel</a></h1>
-              </div>
-           </div>
-           <div class="col-md-2" style="float:right;">
-              <div class="navbar navbar-inverse" role="banner">
-                  <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
-                    <ul class="nav navbar-nav">
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
-                        <ul class="dropdown-menu animated fadeInUp">
-                          <li><a href="login.html">Logout</a></li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </nav>
-              </div>
-           </div>
-        </div>
-     </div>
-</div>
-<div class="page-content">
+ <md-toolbar class="">
+      <div class="md-toolbar-tools">
+        <h2>
+          <span>Project Panel</span>
+        </h2>
+        <span flex></span>
+        <md-menu-bar>
+          <md-menu>
+            <button ng-click="$mdOpenMenu()">
+              My Account
+            </button>
+            <md-menu-content>
+              <md-menu-item>
+                <md-button ng-click="">
+                  Logout
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </md-menu-bar>
+      </div>
+    </md-toolbar>
+<md-content class="page-container">
   <md-button class="md-raised md-primary" ng-click="showAddEditProjectPopup($event);">Add Project</md-button>
-  <div flex-gt-sm="50" flex>
-    <md-content>
-       <md-list flex>
-          <md-list-item class="md-3-line" ng-repeat="project in projectDataSource" ng-click="null">
-              <img ng-src="images/icons/ic_insert_drive_file_24px.svg" class="md-avatar" alt="{{project.name}}" />
-              <div class="md-list-item-text" layout="column">
-                <h3>{{ project.name }}</h3>
-              </div>
-          </md-list-item>
-        </md-list>
+    <md-content class="md-padding" layout-xs="row" layout="row">
+      <div layout="row" flex="100">
+              <md-card md-theme="dark-grey" md-theme-watch ng-repeat="project in projectDataSource" flex="20">
+                <md-card-title>
+                  <md-card-title-text>
+                    <span class="md-headline">{{project.projectName}}</span>
+                  </md-card-title-text>
+                </md-card-title>
+                <md-card-title-media>
+                    <div class="md-media-lg card-media">
+                      <img src="images/icons/ic_insert_drive_file_24px.svg">
+                    </div>
+                  </md-card-title-media>
+                <md-card-actions layout="row" layout-align="end center">
+                  <md-button class="md-raised md-primary" ng-click="showAddEditProjectPopup($event, project._id);">Edit</md-button>
+                </md-card-actions>
+              </md-card>
+        </div>
       </md-content>
-  </div>
-</div>
+</md-content>

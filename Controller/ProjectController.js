@@ -21,24 +21,27 @@ function _createNewProject(req, res) {
             resultObj.result = err;
             res.send(resultObj);
         } else {
-            resultObj.status = OK;
-            resultObj.result = docs;
-            if (req.body.logoImageId) {
-                var updateDoc = {
-                    docPath : req.body.logoImageId.docPath,
-                    docName : req.body.logoImageId.docName,
-                    projectId : docs._id,
-                    updateRef : _updateProjectLogoId
-                };
-                DocumentController.insertDocument(updateDoc, res);
-            } else {
-                console.log('no logo')
-                res.send(resultObj);
-            }
+            _insertDocument(req, res, docs, req.body.logoImageId);
         };
     });
 }
-
+// Make Document Row for Each Doc
+function _insertDocument(req, res, docs, id) {
+    resultObj.status = OK;
+    resultObj.result = docs;
+    if (id) {
+        var updateDoc = {
+            docPath: id.docPath,
+            docName: id.docName,
+            projectId: docs._id,
+            updateRef: _updateProjectLogoId
+        };
+        DocumentController.insertDocument(updateDoc, res);
+    } else {
+        res.send(resultObj);
+    }
+}
+// Update Logo Id for Each Project
 function _updateProjectLogoId(docs, res) {
     Project.findByIdAndUpdate(docs.projectId, {
         $set: {
@@ -72,18 +75,32 @@ function _getProjectDetailByProjectId(req, res) {
     });
 }
 // Edit Project Detail
-function _editProjectDetail (req, res) {
+function _editProjectDetail(req, res) {
     var projectId = req.params.id;
-    Project.findByIdAndUpdate(projectId,{ $set: req.body}, function (err, docs) {
-        if(err){
+    Project.findByIdAndUpdate(projectId, {
+        $set: req.body
+    }, function(err, docs) {
+        if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
             res.send(resultObj);
         } else {
+            _insertDocument(req, res, docs, req.body.logoImageIdNew);
+        }
+    });
+}
+
+// Get All Active Project for Admin
+function _getActiveProject (req, res) {
+    Project.find({deleteflag : false}).populate('logoImageId').exec(function(err, docs){
+        if (err) {
+            resultObj.status = FAIL;
+            resultObj.result = err;
+        } else {
             resultObj.status = OK;
             resultObj.result = docs;
-            res.send(docs);
         }
+        res.send(resultObj);
     });
 }
 // Export Methodz
@@ -91,5 +108,6 @@ module.exports = {
     createNewProject: _createNewProject,
     updateProjectLogoId: _updateProjectLogoId,
     getProjectDetailByProjectId: _getProjectDetailByProjectId,
-    editProjectDetail : _editProjectDetail
+    editProjectDetail: _editProjectDetail,
+    getActiveProject: _getActiveProject
 };
