@@ -10,13 +10,14 @@ function _getUserWithoutAccess(req, res) {
     // search functionlity work on only on model not document
     // find for all / findOne for only for one record
     var findObj = {
-        accessflag: false,
-        deleteFlag: false,
-        userrole: {
-            $nin: 'Admin'
+        'deleteflag': false,
+        'accessflag': false,
+        'userrole': {
+            $nin: ['Admin']
         }
     };
     Users.find(findObj, function(err, docs) {
+        console.log(err, docs)
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
@@ -62,10 +63,10 @@ function _insertUpsertUser(req, res) {
 // Get All Developer for Drop Down
 function _getDeveloperList(req, res) {
     var findObj = {
-        accessflag: true,
-       // deleteFlag: false,
-        userrole: {
-            $nin: 'Admin'
+        'deleteflag': false,
+        'accessflag': true,
+        'userrole': {
+            $nin: ['Admin']
         }
     };
     Users.find(findObj, function(err, docs) {

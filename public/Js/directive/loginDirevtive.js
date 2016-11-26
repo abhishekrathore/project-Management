@@ -3,6 +3,8 @@ angular.module('projectDev')
 	restrict: 'EA';
 	return {
 	    templateUrl:'views/LoginSignUpPage.html',
+	    controller: 'loginSignupCtrl',
+        controllerAs : 'login',
 		link:function (scope){
 		}
 	};

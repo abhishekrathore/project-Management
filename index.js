@@ -69,7 +69,7 @@ passport.use(new GoogleStrategy({
 ));
 // passport serialize user
 passport.serializeUser(function(user, done) {
-    console.log('serializeUser')
+    console.log('serializeUser', user)
     done(null, user.id);
 });
 // passport deserialize user
@@ -97,14 +97,13 @@ app.get('/files/:filename', isAuthenticate, DocumentController.getDocument);
 app.get('/getProjectDetailByProjectId/:id', isAuthenticate, ProjectController.getProjectDetailByProjectId);
 app.put('/editProjectDetail/:id', isAuthenticate, ProjectController.editProjectDetail);
 app.get('/getActiveProject', isAuthenticate, ProjectController.getActiveProject);
-
 // For Check Start Server function
 app.listen(PORT, function() {
     console.log('Server Started In Rest Api on port ' + PORT);
 });
 
 function isAuthenticate(req, res, done) {
-    console.log(req.user)
+    console.log('logo', req.user);
     done();
     // if (req.user) done()
     // else res.send("Not Logged in")

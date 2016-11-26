@@ -22,6 +22,7 @@
     </md-toolbar>
 <md-content class="page-container">
   <md-button class="md-raised md-primary" ng-click="showAddEditProjectPopup($event);">Add Project</md-button>
+  <md-button class="md-raised md-primary" ng-click="toggleUserPanel('unAccessUserPanel');">Give Access to User</md-button>
     <md-content class="md-padding" layout-xs="row" layout="row">
       <div layout="row" flex="100">
               <md-card md-theme="dark-grey" md-theme-watch ng-repeat="project in projectDataSource" flex="20">
@@ -39,6 +40,42 @@
                   <md-button class="md-raised md-primary" ng-click="showAddEditProjectPopup($event, project._id);">Edit</md-button>
                 </md-card-actions>
               </md-card>
+              <div md-theme="dark-grey" md-theme-watch ng-if="!projectDataSource || projectDataSource.length === 0" flex="100">
+                <md-button class="md-fab" aria-label="No Project">
+                  <md-icon md-svg-src="images/icons/ic_error_black_24px.svg"></md-icon>
+                </md-button>
+                <span>You have no projects.Please create one to get started
+                </span> 
+              </div>
         </div>
       </md-content>
 </md-content>
+ <section>
+  <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="unAccessUserPanel" md-theme="docs-dark">
+        <md-toolbar class="md-theme-light">
+        <h1 class="md-toolbar-tools">Not Access User List</h1>
+        </md-toolbar>
+        <md-content  layout-padding>
+           <md-card ng-repeat="(key, user) in userWithoutAccess">
+            <md-card-title>
+              <md-card-title-media>
+                <div class="md-media-sm card-media" layout>
+                  <md-button class="md-fab" aria-label="User" ng-click="giveAccessToUser(key)">
+                      <md-icon md-svg-src="images/icons/ic_done_black_24px.svg"></md-icon>
+                  </md-button>
+                </div>
+              </md-card-title-media>
+              <md-card-title-text>
+                <span class="md-headline">{{user.name}}</span>
+              </md-card-title-text>
+            </md-card-title>
+          </md-card>
+          <div ng-if="!userWithoutAccess || userWithoutAccess.length === 0" >
+            <md-button class="md-fab" aria-label="No User">
+                <md-icon md-svg-src="images/icons/ic_error_black_24px.svg"></md-icon>
+            </md-button>
+            Dont Have New User
+          </div>
+        </md-content>
+  </md-sidenav>
+ </section>

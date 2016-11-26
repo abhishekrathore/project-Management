@@ -1,19 +1,30 @@
-<link  rel="stylesheet" href="/css/loginCss.css">
-<div class="form-wrapper">
-  <form action="#" method="post">
-    <h3>Login here</h3>
-      <div class="form-item">
-  		  <input type="text" name="text" required="required" placeholder="Email" autofocus></input>
+<div layout="column" layout-align="center center" layout-fill="layout-fill">
+  <div layout="column" class="loginBox md-whiteframe-z1">
+    <md-toolbar>
+      <h2 class="md-toolbar-tools"><span>Login</span></h2>
+    </md-toolbar>
+    <md-content layout="column" class="md-padding">
+      <md-input-container>
+        <label>EmailAddress</label>
+        <input type="email" ng-model="username"/>
+      </md-input-container>
+      <md-input-container>
+        <label>Password</label>
+        <input type="password" ng-model="password"/>
+      </md-input-container>
+      <div layout="row" layout-align="center center" style="padding-top:20px;">
+        <md-button class="md-raised md-primary">Login</md-button>
+        <div flex="flex"></div>
+        <md-button href="" md-no-ink="md-no-ink">Forgot Password</md-button>
       </div>
-      <div class="form-item">
-  		  <input type="password" name="password" required="required" placeholder="Password"></input>
+      <div layout="row" layout-align="center center" style="padding-top:20px;">
+       <md-button class="md-fab md-primary md-hue-2" aria-label="Facebook Login">
+            <md-icon md-svg-src=""></md-icon>
+        </md-button>
+        <md-button href="/userLogin" class="md-fab md-hue-2" aria-label="Google Login">
+            <md-icon md-svg-src=""></md-icon>
+        </md-button>
       </div>
-      <div class="button-panel">
-  		  <input type="submit" class="button" title="Log In" value="Login"></input>
-      </div>
-    <div id='wrapper'>
-        <button class='social-btn facebook'><i class="fa fa-facebook" aria-hidden="true"></i></button>
-        <button class='social-btn gplus'><i class="fa fa-google-plus" aria-hidden="true"></i></button>
-    </div>
-  </form>
+    </md-content>
+  </div>
 </div>

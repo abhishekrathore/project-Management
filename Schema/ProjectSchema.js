@@ -41,6 +41,11 @@ var mongoose = require("mongoose"),
             default: null,
             ref: 'Document'
         },
+        documentArray: [{
+            type: Schema.Types.ObjectId,
+            default: null,
+            ref: 'Document'
+        }],
         version: {
             type: Number,
             default: 1.0
