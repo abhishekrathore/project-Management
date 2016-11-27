@@ -26,39 +26,49 @@ function _getDocumentByProjectId(req, res) {
     });
 }
 // Insert New User Function 
-function _insertDocument(projectDoc, res) {
-    var saveDocument = new Document({
-        projectId: projectDoc.projectId,
-        docPath: projectDoc.docPath,
-        docName: projectDoc.docName
-    });
+function _insertDocument(projectDoc, res, isLogo, isDocs, callbackObj) {
     saveDocument.save(function(err, docs) {
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
             res.send(resultObj);
         } else {
-            projectDoc.updateRef(docs, res);
+            callbackObj.cb(docs, res, callbackObj, data);
         };
     });
 }
 // Upload Doc at Server
 function _uploadDocument(req, res) {
+    console.log(req)
     if (req && req.file) {
-        var absolutePath  = path.join(path.dirname(require.main.filename),req.file.path)
+        var absolutePath = path.join(path.dirname(require.main.filename), req.file.path)
         req.file.absolutePath = absolutePath;
-        resultObj.status = OK;
-        resultObj.result = req.file;
+        var saveDocument = new Document({
+            docPath : absolutePath,
+            docName : req.file.filename
+        });
+        saveDocument.save(function(err, docs) {
+            if (err) {
+                resultObj.status = FAIL;
+                resultObj.result = err;
+                res.send(resultObj);
+                console.log(err)
+            } else {
+                resultObj.status = OK;
+                resultObj.result = docs;
+                console.log(docs)
+                res.send(resultObj);
+            };
+        });
     } else {
         resultObj.status = FAIL;
-        resultObj.result = 'Server Error';
+        resultObj.result = 'Server Error';    
+        res.send(resultObj);
     }
-    res.send(resultObj);
 }
 
 // Get Document 
 function _getDocument(req, res) {
-    console.log(req.params)
     fs.readFile('images/' + req.params.filename, function(err, data) {
         if (err) {
             resultObj.status = FAIL;
@@ -67,7 +77,6 @@ function _getDocument(req, res) {
             resultObj.status = OK;
             resultObj.result = data;
         }
-        console.log(resultObj)
         res.send(resultObj);
     });
 }
@@ -103,8 +112,10 @@ function _deleteDocument(req, res) {
 function _updateDocCollection(req, res) {
     resultObj.status = OK;
     resultObj.result = 'file deleted successfully';
-    if(req.query.id) {
-        Document.findOneAndRemove({_id: req.query.id}, function(err, docs){
+    if (req.query.id) {
+        Document.findOneAndRemove({
+            _id: req.query.id
+        }, function(err, docs) {
             res.send(resultObj);
         });
     } else {

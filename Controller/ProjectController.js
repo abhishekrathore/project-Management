@@ -7,47 +7,8 @@ var resultObj = {
     DocumentController = require('../Controller/DocumentController'); // require Controller code code
 // Create A new project
 function _createNewProject(req, res) {
-    var CreateProject = new Project({
-        projectName: req.body.projectName,
-        projectDescription: req.body.projectDescription,
-        projectPrority: req.body.projectPrority,
-        developers: req.body.developers,
-        startdate: req.body.startdate,
-        enddate: req.body.enddate,
-    });
+    var CreateProject = new Project(req.body);
     CreateProject.save(function(err, docs) {
-        if (err) {
-            resultObj.status = FAIL;
-            resultObj.result = err;
-            res.send(resultObj);
-        } else {
-            _insertDocument(req, res, docs, req.body.logoImageId);
-        };
-    });
-}
-// Make Document Row for Each Doc
-function _insertDocument(req, res, docs, id) {
-    resultObj.status = OK;
-    resultObj.result = docs;
-    if (id) {
-        var updateDoc = {
-            docPath: id.docPath,
-            docName: id.docName,
-            projectId: docs._id,
-            updateRef: _updateProjectLogoId
-        };
-        DocumentController.insertDocument(updateDoc, res);
-    } else {
-        res.send(resultObj);
-    }
-}
-// Update Logo Id for Each Project
-function _updateProjectLogoId(docs, res) {
-    Project.findByIdAndUpdate(docs.projectId, {
-        $set: {
-            logoImageId: docs._id
-        }
-    }, function(err, docs) {
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
@@ -56,13 +17,14 @@ function _updateProjectLogoId(docs, res) {
             resultObj.status = OK;
             resultObj.result = docs;
             res.send(resultObj);
-        };
+        }
     });
 }
+
 // Get Project Detail
 function _getProjectDetailByProjectId(req, res) {
     var projectId = req.params.id;
-    Project.findById(projectId).populate('logoImageId').populate('developers._id').exec(function(err, docs) {
+    Project.findById(projectId).populate('logoImageId').populate('documentArray').populate('developers._id').exec(function(err, docs) {
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
@@ -85,14 +47,18 @@ function _editProjectDetail(req, res) {
             resultObj.result = err;
             res.send(resultObj);
         } else {
-            _insertDocument(req, res, docs, req.body.logoImageIdNew);
+            resultObj.status = OK;
+            resultObj.result = docs;
+            res.send(resultObj);
         }
     });
 }
 
 // Get All Active Project for Admin
-function _getActiveProject (req, res) {
-    Project.find({deleteflag : false}).populate('logoImageId').exec(function(err, docs){
+function _getActiveProject(req, res) {
+    Project.find({
+        deleteflag: false
+    }).populate('logoImageId').exec(function(err, docs) {
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
@@ -106,7 +72,6 @@ function _getActiveProject (req, res) {
 // Export Methodz
 module.exports = {
     createNewProject: _createNewProject,
-    updateProjectLogoId: _updateProjectLogoId,
     getProjectDetailByProjectId: _getProjectDetailByProjectId,
     editProjectDetail: _editProjectDetail,
     getActiveProject: _getActiveProject

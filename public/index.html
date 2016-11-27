@@ -18,16 +18,15 @@
         <script src="Js/controller/projectDevCtrl.js"></script>
         <script src="Js/controller/addEditProjectCtrl.js"></script>
         <script src="Js/controller/projectPanelCtrl.js"></script>
+        <script src="Js/controller/projectViewCtrl.js"></script>
+        <script src="Js/controller/pageMapCtrl.js"></script>
         <script src="Js/directive/loginDirevtive.js"></script>
         <script src="Js/directive/projectAddEditDirevtive.js"></script>
         <script src="Js/directive/projectPanelDirective.js"></script>
     </head>
     <body ng-app="projectDev">
-        <div ng-controller="projectDevCtrl">
+        <div ng-controller="projectDevCtrl" style="height: 100%;">
             <ui-view></ui-view>
-        	<!-- <div login-directive> </div> -->
-        	<!-- <div project-panel-dir> </div> -->
-        	
         </div>
     </body>
 </html>

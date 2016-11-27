@@ -25,7 +25,7 @@
   <md-button class="md-raised md-primary" ng-click="toggleUserPanel('unAccessUserPanel');">Give Access to User</md-button>
     <md-content class="md-padding" layout-xs="row" layout="row">
       <div layout="row" flex="100">
-              <md-card md-theme="dark-grey" md-theme-watch ng-repeat="project in projectDataSource" flex="20">
+              <md-card md-theme="altTheme" md-theme-watch ng-repeat="project in projectDataSource" flex="20">
                 <md-card-title>
                   <md-card-title-text>
                     <span class="md-headline">{{project.projectName}}</span>
@@ -38,13 +38,15 @@
                   </md-card-title-media>
                 <md-card-actions layout="row" layout-align="end center">
                   <md-button class="md-raised md-primary" ng-click="showAddEditProjectPopup($event, project._id);">Edit</md-button>
+                  <span flex></span>
+                  <md-button ui-sref="projectView({ project: project, id : project._id })"  class="md-raised md-primary">View</md-button>
                 </md-card-actions>
               </md-card>
-              <div md-theme="dark-grey" md-theme-watch ng-if="!projectDataSource || projectDataSource.length === 0" flex="100">
+              <div md-theme="" md-theme-watch ng-if="!projectDataSource || projectDataSource.length === 0" flex="100">
                 <md-button class="md-fab" aria-label="No Project">
                   <md-icon md-svg-src="images/icons/ic_error_black_24px.svg"></md-icon>
                 </md-button>
-                <span>You have no projects.Please create one to get started
+                <span>You have no projects.Please create one to get started.
                 </span> 
               </div>
         </div>

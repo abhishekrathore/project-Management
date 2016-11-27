@@ -17,7 +17,6 @@ function _getUserWithoutAccess(req, res) {
         }
     };
     Users.find(findObj, function(err, docs) {
-        console.log(err, docs)
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;

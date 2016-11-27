@@ -4,6 +4,7 @@ var express = require('express'), // require express code
     UserController = require('./Controller/UserController'), // require Controller code code
     ProjectController = require('./Controller/ProjectController'), // require Controller code code
     DocumentController = require('./Controller/DocumentController'), // require Controller code code
+    PageMapsController = require('./Controller/PageMapsController'), // require Controller code code
     session = require('express-session'), // require express-session code
     passport = require('passport'), // require passport js code code
     multer = require('multer'), // require multer code
@@ -82,21 +83,27 @@ passport.deserializeUser(function(id, done) {
 app.get('/userLogin', passport.authenticate('google', {
     scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read']
 }));
+// User Collections Apis
 app.get('/userLoginCallback', passport.authenticate('google'), UserController.insertUpsertUser);
 app.get('/getUserWithoutAccess', isAuthenticate, UserController.getUserWithoutAccess);
 app.get('/giveAccessToUser', isAuthenticate, UserController.giveAccessToUser);
 app.get('/getDeveloperList', isAuthenticate, UserController.getDeveloperList);
-// Project Apis
+
+// Project Collections Apis
 app.post('/createNewProject', isAuthenticate, ProjectController.createNewProject);
-// Post  Api for file Logo Upload
-app.post('/uploadLogo', isAuthenticate, upload.single('logo'), DocumentController.uploadDocument);
-// Post  Api for file Upload
-app.post('/uploadDocs', isAuthenticate, upload.array('docs', 4), DocumentController.uploadDocument);
-app.get('/deleteDocument', isAuthenticate, DocumentController.deleteDocument);
-app.get('/files/:filename', isAuthenticate, DocumentController.getDocument);
 app.get('/getProjectDetailByProjectId/:id', isAuthenticate, ProjectController.getProjectDetailByProjectId);
 app.put('/editProjectDetail/:id', isAuthenticate, ProjectController.editProjectDetail);
 app.get('/getActiveProject', isAuthenticate, ProjectController.getActiveProject);
+
+// Document Collections Apis
+app.post('/uploadDocs', isAuthenticate, upload.single('doc'), DocumentController.uploadDocument);
+app.get('/deleteDocument', isAuthenticate, DocumentController.deleteDocument);
+app.get('/files/:filename', isAuthenticate, DocumentController.getDocument);
+// Project Map Collections Apis
+app.post('/saveScreen', isAuthenticate, PageMapsController.saveScreen);
+app.get('/getActiveScreens/:id', isAuthenticate, PageMapsController.getActiveScreens);
+app.get('/getScreenDetail/:id', isAuthenticate, PageMapsController.getScreenDetail);
+app.put('/updateScreen/:id', isAuthenticate, PageMapsController.updateScreen);
 // For Check Start Server function
 app.listen(PORT, function() {
     console.log('Server Started In Rest Api on port ' + PORT);
