@@ -3,7 +3,7 @@ angular.module('projectDev')
 pageMapCtrl.$inject = ['$scope', 'serverRequestService', '$stateParams', '$location'];
 // Project Dev Controller
 function pageMapCtrl($scope, serverRequestService, $stateParams, $location) {
-    if(!$stateParams.id || !$stateParams.project) {
+    if (!$stateParams.id) { //|| !$stateParams.project
         $location.path('/projectPanel');
     }
     var _THIS = this;
@@ -17,15 +17,16 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $location) {
     _THIS.getDocument = serverRequestService.getDocument;
     _THIS.saveScreenView = _saveScreenView;
     _THIS.getScreenDetail = _getScreenDetail;
+    _THIS.taskGridHeader = serverRequestService.taskGridHeader;
     serverRequestService.serverRequest('getActiveScreens/' + $stateParams.id, 'GET').then(_getActiveScreens);
-    $scope.$watch('screenForm',function(newVal){
-        if(newVal) {
+    $scope.$watch('screenForm', function(newVal) {
+        if (newVal) {
             _renderNewScreen();
         }
     });
     // Render New Screen
     function _renderNewScreen() {
-        _THIS.screenView  = {};
+        _THIS.screenView = {};
         _THIS.screenView.projectId = $stateParams.id;
         _THIS.screenImage = null;
         _THIS.disableInput = false;
@@ -55,7 +56,7 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $location) {
         serverRequestService.serverRequest('/getScreenDetail/' + _THIS.activeScreenArray[index]._id, 'GET').then(_getScreenDetailResponse);
     }
     // _getScreenDetailResponse
-    function _getScreenDetailResponse (res) {
+    function _getScreenDetailResponse(res) {
         _THIS.disableInput = true;
         _THIS.screenView = res.result;
         _THIS.screenImage = res.result.docId;
@@ -70,7 +71,7 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $location) {
             serverRequestService.serverRequest('saveScreen/', 'POST', _THIS.screenView).then(function(res) {
                 serverRequestService.showNotification('success', 'Porject Screen Save successfully', 'Save', 2000);
                 _THIS.activeScreenArray.push(res.result);
-                _getScreenDetail(_THIS.activeScreenArray.length-1);
+                _getScreenDetail(_THIS.activeScreenArray.length - 1);
             });
         } else if ($scope.screenForm.screenName.$valid && _THIS.screenView._id) {
             serverRequestService.serverRequest('updateScreen/' + _THIS.screenView._id, 'PUT', _THIS.screenView).then(function(res) {

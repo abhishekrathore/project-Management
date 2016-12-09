@@ -12,6 +12,23 @@ function serverRequestService($http, $q, Upload, Notification) {
     _THIS.serverRequest = _serverRequest;
     _THIS.serverError = _serverError;
     _THIS.showNotification = _showNotification;
+    _THIS.taskGridHeader = [{
+        title : 'Task'
+    },{
+        title : 'Phase'
+    },{
+        title : 'Time'
+    },{
+        title : 'Pirority'
+    },{
+        title : 'Dev'
+    },{
+        title : 'Status'
+    },{
+        title : 'Remark'
+    },{
+        title : 'Action'
+    }]
     // Server Error Function
     function _serverError (res) {
         console.log(res);

@@ -5,6 +5,7 @@ var express = require('express'), // require express code
     ProjectController = require('./Controller/ProjectController'), // require Controller code code
     DocumentController = require('./Controller/DocumentController'), // require Controller code code
     PageMapsController = require('./Controller/PageMapsController'), // require Controller code code
+    TaskController = require('./Controller/TaskController'), // require Controller code code
     session = require('express-session'), // require express-session code
     passport = require('passport'), // require passport js code code
     multer = require('multer'), // require multer code
@@ -27,7 +28,6 @@ var express = require('express'), // require express code
 upload = multer({
         storage: storage
     }),
-
     app = express(); // initilize exporess in app variable
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -94,7 +94,6 @@ app.post('/createNewProject', isAuthenticate, ProjectController.createNewProject
 app.get('/getProjectDetailByProjectId/:id', isAuthenticate, ProjectController.getProjectDetailByProjectId);
 app.put('/editProjectDetail/:id', isAuthenticate, ProjectController.editProjectDetail);
 app.get('/getActiveProject', isAuthenticate, ProjectController.getActiveProject);
-
 // Document Collections Apis
 app.post('/uploadDocs', isAuthenticate, upload.single('doc'), DocumentController.uploadDocument);
 app.get('/deleteDocument', isAuthenticate, DocumentController.deleteDocument);
@@ -104,6 +103,10 @@ app.post('/saveScreen', isAuthenticate, PageMapsController.saveScreen);
 app.get('/getActiveScreens/:id', isAuthenticate, PageMapsController.getActiveScreens);
 app.get('/getScreenDetail/:id', isAuthenticate, PageMapsController.getScreenDetail);
 app.put('/updateScreen/:id', isAuthenticate, PageMapsController.updateScreen);
+// Task Api
+app.get('/getTaskByScreenId/:id', isAuthenticate, TaskController.getTaskByScreenId);
+app.post('/saveTask', isAuthenticate, TaskController.saveTask);
+app.put('/editTask/:id', isAuthenticate, TaskController.editTask);
 // For Check Start Server function
 app.listen(PORT, function() {
     console.log('Server Started In Rest Api on port ' + PORT);

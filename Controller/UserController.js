@@ -54,8 +54,8 @@ function _insertUpsertUser(req, res) {
         } else {
             resultObj.status = OK;
             resultObj.result = docs;
+            res.send(resultObj);
         }
-        res.send(resultObj);
     });
 }
 
