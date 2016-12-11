@@ -52,6 +52,7 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $location) {
     function _getScreenDetail(index) {
         _THIS.activeButton = {};
         _THIS.activeButton[index] = 'dark-grey';
+        _THIS.editIndex = index;
         _THIS.defaultActive = '';
         serverRequestService.serverRequest('/getScreenDetail/' + _THIS.activeScreenArray[index]._id, 'GET').then(_getScreenDetailResponse);
     }
@@ -76,6 +77,8 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $location) {
         } else if ($scope.screenForm.screenName.$valid && _THIS.screenView._id) {
             serverRequestService.serverRequest('updateScreen/' + _THIS.screenView._id, 'PUT', _THIS.screenView).then(function(res) {
                 serverRequestService.showNotification('success', 'Porject Screen Update successfully', 'Update', 2000);
+                _THIS.activeScreenArray[_THIS.editIndex] = _THIS.screenView;
+                _THIS.disableInput = true;
             });
         } else {
             $scope.screenForm.$setSubmitted();
