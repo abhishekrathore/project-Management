@@ -1,6 +1,6 @@
 angular.module('projectDev')
     .controller('projectDevCtrl', projectDevCtrl);
-projectDevCtrl.$inject = ['$scope'];
+projectDevCtrl.$inject = [];
 // Project Dev Controller
-function projectDevCtrl($scope) {
+function projectDevCtrl() {
 }

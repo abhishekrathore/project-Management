@@ -1,0 +1,24 @@
+<md-toolbar class="">
+    <div class="md-toolbar-tools">
+        <md-button md-colors="{background: 'red'}" ng-if="projectHeader.isBack" ui-sref="projectView({ project: pageMap.project, id : pageMap.project._id })" class="md-raised md-primary">Back</md-button>
+        <span flex></span>
+        <h2>
+          <span>{{projectHeader.headerText}}</span>
+        </h2>
+        <span flex></span>
+        <md-menu-bar>
+            <md-menu>
+                <button ng-click="$mdOpenMenu()">
+                    My Account
+                </button>
+                <md-menu-content>
+                    <md-menu-item>
+                        <md-button ng-click="projectHeader.logOutUser()">
+                            Logout
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </md-menu-bar>
+    </div>
+</md-toolbar>

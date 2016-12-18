@@ -9,7 +9,12 @@ var mongoose = require("mongoose"),
         },
         screenName: {
             type: String,
-            required: true
+            unique: true,
+            required: [true, 'Screen Name Require'],
+            validate: {
+                validator: _alphaNumericValidation,
+                message: '{VALUE} is not a valid Screen Name!'
+            }
         },
         docPath: {
             type: String,
@@ -29,3 +34,7 @@ var mongoose = require("mongoose"),
     });
 // Export User Schema
 module.exports = PageMapsSchema;
+// function that validate the value is alpha numeric or not
+function _alphaNumericValidation(value) {
+    return /^[a-zA-Z0-9\-\s]+$/.test(value);
+}

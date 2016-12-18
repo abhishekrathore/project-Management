@@ -1,112 +1,91 @@
-<style type="text/css">
-md-dialog.fullscreen-dialog {
-    max-width: 100%;
-    max-height: 100%;
-    width: 100%;
-    border-radius: 0;
-}</style>
-<md-dialog aria-label="Add Edit Project" class="fullscreen-dialog">
-<md-dialog-content>
-<form name="projectForm">
+<md-dialog aria-label="Add Edit Project">
     <md-toolbar>
-    <div class="md-toolbar-tools">
-        <h2>Add Or Edit Project</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="closePopup()">
-        <md-icon md-svg-src="images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
-        </md-button>
-    </div>
+        <div class="md-toolbar-tools">
+            <h2>Add Or Edit Project</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="closePopup()">
+                <md-icon md-svg-src="images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
     </md-toolbar>
-    <md-content md-theme="{{dynamicTheme}}" layout-gt-sm="row" layout-padding flex="100">
-    <div>
-        <md-input-container>
-        <label>Project Name</label>
-        <input type="text" name="projectName" ng-model ="project.projectName"  md-maxlength="10" required>
-        </md-input-container>
-        <md-input-container class="md-block">
-        <label>Project Description</label>
-        <textarea name="projectDescription" ng-model ="project.projectDescription" required md-maxlength="150" rows="5" md-select-on-focus></textarea>
-        </md-input-container>
-    </div>
-    <div style ="width: 210px;">
-        <md-input-container>
-        <label for="startDay">Start Date</label>
-        <md-datepicker name="startDay" ng-model="project.startdateCn" md-placeholder="Enter date"
-        ng-change ="dateChange();"></md-datepicker>
-        </md-input-container>
-        <md-input-container>
-        <label for="endDay">End Date</label>
-        <md-datepicker name="endDay" ng-model="project.enddateCn" md-placeholder="Enter date"
-        md-min-date="minDate"   ng-change ="dateChange();" required></md-datepicker>
-        </md-input-container>
-        <md-input-container style="width: 210px;">
-        <label for="projectPrority">Project Prority</label>
-        <md-select name="projectPrority" ng-model="project.projectPrority"
-        md-on-close=""
-        data-md-container-class="selectdemoSelectHeader"
-        >
-        <md-optgroup label="Project Prority">
-        <md-option value="high">High</md-option>
-        <md-option value="medium">Medium</md-option>
-        <md-option value="low">Low</md-option>
-        </md-optgroup>
-        </md-select>
-        </md-input-container>
-    </div>
-    <div style="width: 321px;">
-        <md-input-container style="width: 292px;">
-        <label for="developers">Select Dev</label>
-        <md-select name="developers" ng-model="project.developers"
-        md-on-close=""
-        data-md-container-class="selectdemoSelectHeader"
-        multiple>
-        <md-optgroup label="Select Dev">
-        <md-option style="width: 300px;" ng-repeat=" dev in developerDataSource" ng-value="dev._id">{{dev.name}}</md-option>
-        </md-optgroup>
-        </md-select>
-        </md-input-container>
-        <md-button ng-disabled = "submitDisable" class="md-fab" aria-label="Upload Logo" ngf-select ="projectForm.logoImage.$valid ? uploadLogo(): ''" ng-model="logoImageVar" name="logoImage" ngf-pattern="'image/*'" ngf-accept="'.ico,.jpg,.png'"  ngf-max-size="1MB" ngf-min-height="100"  ngf-resize="{width: 100, height: 100}">
-        <md-icon md-svg-src="images/icons/ic_file_upload_black_24px.svg"></md-icon>
-        <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
-        Upload Logo
-        </md-tooltip>
-        </md-button>
-        <i ng-show="projectForm.logoImage.$error.maxSize">File too large : max 1MB</i>
-        <i ng-show="projectForm.logoImage.$error.pattern">Only Select .ico,.jpg,.png type of Image</i>
-        <md-button ng-click="getDocument(logoImage.docName)" download="{{logoImage.docName}}" ng-if="logoImage.docName" flex>{{logoImage.docName}}</md-button>
-        <md-button ng-if="logoImage.docName" ng-disabled = "!deleteLogoFlag" class="md-icon-button" ng-click="deleteLogo()">
-        <md-icon md-svg-src="images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
-        </md-button>
-    </div>
-    <div style ="width: 210px;">
-        <md-input-container style="width: 292px;">
-        <md-button ng-disabled = "submitDisable" class="md-fab" aria-label="Upload Document" ngf-select ="projectForm.documentArray.$valid ? uploadDocs(): ''" ng-model="documentInput" name="documentArray"  ngf-max-size="5MB" ngf-min-height="100"  ngf-resize="{width: 100, height: 100}">
-        <md-icon md-svg-src="images/icons/ic_file_upload_black_24px.svg"></md-icon>
-        <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
-        Upload Document
-        </md-tooltip>
-        </md-button>
-        <i ng-show="projectForm.documentArray.$error.maxSize">File too large : max 5MB</i>
-        <div ng-repeat="(key, document) in documentArray">
-            <md-button ng-click="getDocument(document.docName)" download="{{document.docName}}" ng-if="document.docName" flex>{{document.docName}}</md-button>
-            <md-button ng-if="document.docName" ng-disabled = "!deleteLogoFlag" class="md-icon-button" ng-click="deleteDocs(key)">
-            <md-icon md-svg-src="images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
-        </md-button></div>
-        </md-input-container>
-        <md-input-container>
-        <md-radio-group ng-model="dynamicTheme">
-        <md-radio-button value="altTheme" class="md-primary">altTheme</md-radio-button>
-        <md-radio-button value="dark-grey" class="md-primary">Dark Grey</md-radio-button>
-        <md-radio-button value="docs-dark">Docs dark</md-radio-button>
-        </md-radio-group>
-        </md-input-container>
-    </div>
-    <div>
-    <md-input-container>
-        <md-button class="md-raised md-primary" ng-if="!addEditButtonFlag" ng-disabled = "submitDisable" ng-click="createEditProject()">Create</md-button>
-        <md-button class="md-raised md-primary" ng-if="addEditButtonFlag" ng-disabled = "submitDisable" ng-click="editProjectDetail()">Edit</md-button>
-        </md-input-container></div>
-    </md-content>
-</form>
+    <form name="projectForm">
+        <md-content md-theme="{{dynamicTheme}}" layout-gt-sm="row" layout-padding flex="100">
+            <div>
+                <md-input-container>
+                    <label>Project Name</label>
+                    <input type="text" name="projectName" ng-model="project.projectName" md-maxlength="10" required>
+                </md-input-container>
+                <md-input-container>
+                    <md-radio-group ng-model="dynamicTheme">
+                        <md-radio-button value="altTheme" class="md-primary">altTheme</md-radio-button>
+                        <md-radio-button value="dark-grey" class="md-primary">Dark Grey</md-radio-button>
+                        <md-radio-button value="docs-dark">Docs dark</md-radio-button>
+                    </md-radio-group>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>Project Description</label>
+                    <textarea name="projectDescription" ng-model="project.projectDescription" required md-maxlength="150" rows="5" md-select-on-focus></textarea>
+                </md-input-container>
+                <md-input-container>
+                    <label for="projectPrority">Project Prority</label>
+                    <md-select name="projectPrority" ng-model="project.projectPrority" md-on-close="" data-md-container-class="selectdemoSelectHeader">
+                        <md-optgroup label="Project Prority">
+                            <md-option value="high">High</md-option>
+                            <md-option value="medium">Medium</md-option>
+                            <md-option value="low">Low</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </md-input-container>
+                <md-input-container style="width: 292px;">
+                    <label for="developers">Select Dev</label>
+                    <md-select name="developers" ng-model="project.developers" md-on-close="" data-md-container-class="selectdemoSelectHeader" multiple>
+                        <md-optgroup label="Select Dev">
+                            <md-option style="width: 300px;" ng-repeat=" dev in developerDataSource" ng-value="dev._id">{{dev.name}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </md-input-container>
+                <md-input-container>
+                    <label for="startDay">Start Date</label>
+                    <md-datepicker name="startDay" ng-model="project.startdateCn" md-placeholder="Enter date" ng-change="dateChange();"></md-datepicker>
+                </md-input-container>
+                <md-input-container>
+                    <label for="endDay">End Date</label>
+                    <md-datepicker name="endDay" ng-model="project.enddateCn" md-placeholder="Enter date" md-min-date="minDate" ng-change="dateChange();" required></md-datepicker>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <md-button ng-disabled="submitDisable" class="md-fab" aria-label="Upload Logo" ngf-select="projectForm.logoImage.$valid ? uploadLogo(): ''" ng-model="logoImageVar" name="logoImage" ngf-pattern="'image/*'" ngf-accept="'.ico,.jpg,.png'" ngf-max-size="1MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}">
+                        <md-icon md-svg-src="images/icons/ic_file_upload_black_24px.svg"></md-icon>
+                        <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
+                            Upload Logo
+                        </md-tooltip>
+                    </md-button>
+                    <i ng-show="projectForm.logoImage.$error.maxSize">File too large : max 1MB</i>
+                    <i ng-show="projectForm.logoImage.$error.pattern">Only Select .ico,.jpg,.png type of Image</i>
+                    <md-button ng-click="getDocument(logoImage.docName)" download="{{logoImage.docName}}" ng-if="logoImage.docName" flex>{{logoImage.docName}}</md-button>
+                    <md-button ng-if="logoImage.docName" ng-disabled="!deleteLogoFlag" class="md-icon-button" ng-click="deleteLogo()">
+                        <md-icon md-svg-src="images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <md-button ng-disabled="submitDisable" class="md-fab" aria-label="Upload Document" ngf-select="projectForm.documentArray.$valid ? uploadDocs(): ''" ng-model="documentInput" name="documentArray" ngf-max-size="5MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}">
+                        <md-icon md-svg-src="images/icons/ic_file_upload_black_24px.svg"></md-icon>
+                        <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
+                            Upload Document
+                        </md-tooltip>
+                    </md-button>
+                    <i ng-show="projectForm.documentArray.$error.maxSize">File too large : max 5MB</i>
+                    <div ng-repeat="(key, document) in documentArray">
+                        <md-button ng-click="getDocument(document.docName)" download="{{document.docName}}" ng-if="document.docName" flex>{{document.docName}}</md-button>
+                        <md-button ng-if="document.docName" ng-disabled="!deleteLogoFlag" class="md-icon-button" ng-click="deleteDocs(key)">
+                            <md-icon md-svg-src="images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                        </md-button>
+                    </div>
+                </md-input-container>
+                 <md-input-container>
+                    <md-button class="md-raised md-primary" ng-if="!addEditButtonFlag" ng-disabled="submitDisable" ng-click="createEditProject()">Create</md-button>
+                    <md-button class="md-raised md-primary" ng-if="addEditButtonFlag" ng-disabled="submitDisable" ng-click="editProjectDetail()">Edit</md-button>
+                </md-input-container>
+            </div>
+        </md-content>
+    </form>
 </md-dialog>
-</md-dialog-content>

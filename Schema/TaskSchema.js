@@ -4,23 +4,21 @@ var mongoose = require("mongoose"),
     TaskSchema = mongoose.Schema({
         screenId: {
             type: Schema.Types.ObjectId,
-            default: null,
+            required: [true, 'Screen Id is Require'],
             ref: 'PageMaps'
         },
         projectId: {
             type: Schema.Types.ObjectId,
             ref: 'Project',
-            required: true
+            required: [true, 'Project Id is Require']
         },
         taskTitle: {
             type: String,
             unique: true,
             required: [true, 'Task Title is Require']
         },
-        type: {
-            type: String,
-            unique: true,
-            required: [true, 'Task Type is Require']
+        taskType: {
+            type: String
         },
         prority: {
             type: String,
@@ -35,7 +33,7 @@ var mongoose = require("mongoose"),
             required: [true, 'Task End Date is Require'],
             validate: {
                 validator: _dateValidator,
-                message: '{VALUE} must be greater than Start Date'
+                message: '{VALUE} must be greater than Current Date'
             }
         },
         developers: [{
@@ -44,9 +42,8 @@ var mongoose = require("mongoose"),
             ref: 'User'
         }],
         status: {
-            type: Schema.Types.ObjectId,
+            type: String,
             default: 'panding',
-            ref: 'Document'
         },
         remark: {
             type: String,

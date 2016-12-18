@@ -1,40 +1,26 @@
 angular.module('projectDev')
     .service('serverRequestService', serverRequestService);
-serverRequestService.$inject = ['$http', '$q', 'Upload', 'Notification'];
+serverRequestService.$inject = ['$http', '$q', 'Upload', 'Notification', '$state'];
 // Project Dev Controller
-function serverRequestService($http, $q, Upload, Notification) {
+function serverRequestService($http, $q, Upload, Notification, $state) {
     var _THIS = this,
     OK = 'ok',
-    FAIL = 'fail';
+    FAIL = 'fail'
+    UNAUTHORIZED = 'unauthorized',
+    NOACCESS = 'noaccess';
     _THIS.deleteDocument = _deleteDocument;
     _THIS.upload = _upload;
     _THIS.getDocument = _getDocument;
     _THIS.serverRequest = _serverRequest;
     _THIS.serverError = _serverError;
     _THIS.showNotification = _showNotification;
-    _THIS.taskGridHeader = [{
-        title : 'Task'
-    },{
-        title : 'Phase'
-    },{
-        title : 'Time'
-    },{
-        title : 'Pirority'
-    },{
-        title : 'Dev'
-    },{
-        title : 'Status'
-    },{
-        title : 'Remark'
-    },{
-        title : 'Action'
-    }]
+    _THIS.authCheck = _authCheck;
+    _THIS.errorById = _errorById;
     // Server Error Function
     function _serverError (res) {
-        console.log(res);
     };
     // Method for Do Server Request
-    function _serverRequest (url, method, postData) {
+    function _serverRequest (url, method, postData, isAuthenticateFlag) {
     	var defer = $q.defer();
     	var data = postData || '';
         $http({
@@ -47,10 +33,16 @@ function serverRequestService($http, $q, Upload, Notification) {
         }).success(function(res) {
         	if(res.status === OK){
         		defer.resolve(res);
-        	} else {
-        		_THIS.serverError(res);
+        	} else if(res.status === UNAUTHORIZED && !isAuthenticateFlag){
+                $state.go('signin')
         		defer.reject(res);
-        	}
+        	} else if(res.status === NOACCESS){
+                $state.go('noAccessUser');
+                defer.resolve(res);
+            } else {
+                _THIS.serverError(res);
+                defer.reject(res);
+            }
         }).error(function(res, status, headers, config) {
             _THIS.serverError(res);
             defer.reject(res);
@@ -103,6 +95,19 @@ function serverRequestService($http, $q, Upload, Notification) {
     function _getDocumentsResponse(res) {
         console.log(res.result);
     }
+
+    // user Auth Service 
+    function _authCheck () {
+        var defer = $q.defer();
+        _THIS.serverRequest('/isAuthenticate', 'GET').then(function(res) {
+            _THIS.accessFlag = res.result.accessFlag;
+            defer.resolve(res);
+        }, function(res) {
+            $state.go('signin');
+            defer.reject(res);
+        });
+        return defer.promise;
+    }
     // local function for show notification
     function _showNotification(type, message, title, delay) {
         Notification[type]({
@@ -110,6 +115,13 @@ function serverRequestService($http, $q, Upload, Notification) {
             title: title,
             delay: delay
         });
+    }
+
+    // Error By ID
+    function _errorById (res) {
+        if(res.status === 'fail' && res.result.kind === 'ObjectId') {
+            $state.go('projectPanel');
+        }
     }
     
 }

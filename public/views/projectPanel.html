@@ -1,83 +1,62 @@
- <md-toolbar class="">
-      <div class="md-toolbar-tools">
-        <h2>
-          <span>Project Panel</span>
-        </h2>
-        <span flex></span>
-        <md-menu-bar>
-          <md-menu>
-            <button ng-click="$mdOpenMenu()">
-              My Account
-            </button>
-            <md-menu-content>
-              <md-menu-item>
-                <md-button ng-click="">
-                  Logout
-                </md-button>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
-        </md-menu-bar>
-      </div>
-    </md-toolbar>
+<div project-header header-text = "projectPanel.headerText" is-back="false"> </div>
 <md-content class="page-container">
-  <md-button class="md-raised md-primary" ng-click="showAddEditProjectPopup($event);">Add Project</md-button>
-  <md-button class="md-raised md-primary" ng-click="toggleUserPanel('unAccessUserPanel');">Give Access to User</md-button>
+    <md-button class="md-raised md-primary" ng-if="projectPanel.editFlag" ng-click="projectPanel.showAddEditProjectPopup($event);">Add Project</md-button>
+    <md-button ng-if="projectPanel.editFlag" class="md-raised md-primary" ng-click="projectPanel.toggleUserPanel('unAccessUserPanel');">Give Access to User</md-button>
     <md-content class="md-padding" layout-xs="row" layout="row">
-      <div layout="row" flex="100">
-              <md-card md-theme="altTheme" md-theme-watch ng-repeat="project in projectDataSource" flex="20">
+        <div layout="row" flex="100">
+            <md-card md-theme="altTheme" md-theme-watch ng-repeat="project in projectPanel.projectDataSource" flex="20">
                 <md-card-title>
-                  <md-card-title-text>
-                    <span class="md-headline">{{project.projectName}}</span>
-                  </md-card-title-text>
+                    <md-card-title-text>
+                        <span class="md-headline">{{project.projectName}}</span>
+                    </md-card-title-text>
                 </md-card-title>
                 <md-card-title-media>
                     <div class="md-media-lg card-media">
-                      <img src="images/icons/ic_insert_drive_file_24px.svg">
+                        <img src="images/icons/ic_insert_drive_file_24px.svg">
                     </div>
-                  </md-card-title-media>
+                </md-card-title-media>
                 <md-card-actions layout="row" layout-align="end center">
-                  <md-button class="md-raised md-primary" ng-click="showAddEditProjectPopup($event, project._id);">Edit</md-button>
-                  <span flex></span>
-                  <md-button ui-sref="projectView({ project: project, id : project._id })"  class="md-raised md-primary">View</md-button>
+                    <md-button ng-if="projectPanel.editFlag" class="md-raised md-primary" ng-click="projectPanel.showAddEditProjectPopup($event, project._id);">Edit</md-button>
+                    <span flex></span>
+                    <md-button ui-sref="projectView({id : project._id })" class="md-raised md-primary">View</md-button>
                 </md-card-actions>
-              </md-card>
-              <div md-theme="" md-theme-watch ng-if="!projectDataSource || projectDataSource.length === 0" flex="100">
+            </md-card>
+            <div md-theme="" md-theme-watch ng-if="!projectPanel.projectDataSource || projectPanel.projectDataSource.length === 0" flex="100">
                 <md-button class="md-fab" aria-label="No Project">
-                  <md-icon md-svg-src="images/icons/ic_error_black_24px.svg"></md-icon>
+                    <md-icon md-svg-src="images/icons/ic_error_black_24px.svg"></md-icon>
                 </md-button>
                 <span>You have no projects.Please create one to get started.
-                </span> 
-              </div>
+                </span>
+            </div>
         </div>
-      </md-content>
+    </md-content>
 </md-content>
- <section>
-  <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="unAccessUserPanel" md-theme="docs-dark">
+<section>
+    <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="unAccessUserPanel" md-theme="docs-dark">
         <md-toolbar class="md-theme-light">
-        <h1 class="md-toolbar-tools">Not Access User List</h1>
+            <h1 class="md-toolbar-tools">Not Access User List</h1>
         </md-toolbar>
-        <md-content  layout-padding>
-           <md-card ng-repeat="(key, user) in userWithoutAccess">
-            <md-card-title>
-              <md-card-title-media>
-                <div class="md-media-sm card-media" layout>
-                  <md-button class="md-fab" aria-label="User" ng-click="giveAccessToUser(key)">
-                      <md-icon md-svg-src="images/icons/ic_done_black_24px.svg"></md-icon>
-                  </md-button>
-                </div>
-              </md-card-title-media>
-              <md-card-title-text>
-                <span class="md-headline">{{user.name}}</span>
-              </md-card-title-text>
-            </md-card-title>
-          </md-card>
-          <div ng-if="!userWithoutAccess || userWithoutAccess.length === 0" >
-            <md-button class="md-fab" aria-label="No User">
-                <md-icon md-svg-src="images/icons/ic_error_black_24px.svg"></md-icon>
-            </md-button>
-            Dont Have New User
-          </div>
+        <md-content layout-padding>
+            <md-card ng-repeat="(key, user) in projectPanel.userWithoutAccess">
+                <md-card-title>
+                    <md-card-title-media>
+                        <div class="md-media-sm card-media" layout>
+                            <md-button class="md-fab" aria-label="User" ng-click="projectPanel.giveAccessToUser(key)">
+                                <md-icon md-svg-src="images/icons/ic_done_black_24px.svg"></md-icon>
+                            </md-button>
+                        </div>
+                    </md-card-title-media>
+                    <md-card-title-text>
+                        <span class="md-headline">{{user.name}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+            <div ng-if="!projectPanel.userWithoutAccess || projectPanel.userWithoutAccess.length === 0">
+                <md-button class="md-fab" aria-label="No User">
+                    <md-icon md-svg-src="images/icons/ic_error_black_24px.svg"></md-icon>
+                </md-button>
+                Dont Have New User
+            </div>
         </md-content>
-  </md-sidenav>
- </section>
+    </md-sidenav>
+</section>

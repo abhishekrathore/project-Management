@@ -100,10 +100,26 @@ function _giveAccessToUser(req, res) {
             res.send(resultObj);
         });
 }
+
+// Get User Detail 
+function _getUserDetail(useremail, callback) {
+    var findObj = {
+        'deleteflag': false,
+        'useremail': useremail
+    };
+    Users.find(findObj, function(err, docs) {
+        if (err) {
+            callback(null, err)
+        } else {
+            callback(null, docs)
+        };
+    });
+}
 // Export Methodz
 module.exports = {
     getUserWithoutAccess: _getUserWithoutAccess,
     insertUpsertUser: _insertUpsertUser,
     getDeveloperList: _getDeveloperList,
-    giveAccessToUser: _giveAccessToUser
+    giveAccessToUser: _giveAccessToUser,
+    getUserDetail : _getUserDetail 
 };

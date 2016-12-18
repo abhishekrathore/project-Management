@@ -1,15 +1,6 @@
-<md-toolbar class="">
-    <div class="md-toolbar-tools">
-        <md-button md-colors="{background: 'red'}" ui-sref="projectView({ project: pageMap.project, id : pageMap.project._id })" class="md-raised md-primary">Back</md-button>
-        <span flex></span>
-        <h2>
-  <span>{{pageMap.project.projectName}}</span>
-  </h2>
-        <span flex></span>
-    </div>
-</md-toolbar>
+<div project-header header-text="pageMap.headerText" is-back="true"> </div>
 <section layout="row" flex style="height: 90%;" md-theme="docs-dark">
-    <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4" style="height: 100%;">
+    <md-sidenav class="md-sidenav-left" md-component-id="AddScreenPanel" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4" style="height: 100%;">
         <md-toolbar class="md-theme-indigo" style="text-align:center">
             <h1 class="md-toolbar-tools" style="text-align:center">Project Map Screens</h1>
         </md-toolbar>
@@ -17,6 +8,9 @@
         <md-button class="md-raised md-primary" md-theme="{{pageMap.defaultActive}}" ng-click="pageMap.renderNewScreen()">Add New Screen</md-button>
     </md-sidenav>
     <md-content flex layout-padding>
+        <md-button class="md-fab" aria-label="Comment" ng-click="pageMap.toggleSideNav('AddScreenPanel')">
+            <md-icon md-svg-src="images/icons/ic_list_black_24px.svg"></md-icon>
+        </md-button>
         <div layout="column" layout-align="top left">
             <form name="screenForm">
                 <md-content layout-gt-sm="row" layout-padding flex="100">
@@ -24,32 +18,39 @@
                         <label>Screen Name</label>
                         <input type="text" name="screenName" ng-model="pageMap.screenView.screenName" md-maxlength="10" ng-readonly="pageMap.disableInput" required>
                     </md-input-container>
-                    <md-button ng-disabled="pageMap.disableInput" class="md-fab" aria-label="Upload Screen View" ngf-select="screenForm.screenView.$valid ? pageMap.uploadScreen(): ''" ng-model="pageMap.screenImageVar" name="screenView" ngf-pattern="'image/*'" ngf-accept="'.ico,.jpg,.png'" ngf-max-size="1MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" required>
-                        <md-icon md-svg-src="images/icons/ic_file_upload_black_24px.svg"></md-icon>
-                        <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
-                            Upload Screen View
-                        </md-tooltip>
-                    </md-button>
-                    <i ng-show="screenForm.screenView.$error.required">Screen Shoot Image of Screen Page is Require.</i>
-                    <i ng-show="screenForm.screenView.$error.maxSize">File too large : max 1MB</i>
-                    <i ng-show="screenForm.screenView.$error.pattern">Only Select .ico,.jpg,.png type of Image</i>
-                    <md-button ng-click="pageMap.getDocument(pageMap.screenImage.docName)" download="{{pageMap.screenImage.docName}}" ng-if="pageMap.screenImage.docName" flex>{{pageMap.screenImage.docName}}</md-button>
-                    <md-button ng-if="!pageMap.disableInput" class="md-raised md-primary" ng-click="pageMap.saveScreenView()">Save</md-button>
-                    <md-button ng-if="pageMap.disableInput" class="md-raised md-primary" ng-click="pageMap.disableInput = false;">Edit</md-button>
+                    <md-input-container>
+                        <md-button ng-disabled="pageMap.disableInput" class="md-fab" aria-label="Upload Screen View" ngf-select="screenForm.screenView.$valid ? pageMap.uploadScreen(): ''" ng-model="pageMap.screenImageVar" name="screenView" ngf-pattern="'image/*'" ngf-accept="'.ico,.jpg,.png'" ngf-max-size="1MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" required>
+                            <md-icon md-svg-src="images/icons/ic_file_upload_black_24px.svg"></md-icon>
+                            <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
+                                Upload Screen View
+                            </md-tooltip>
+                        </md-button>
+                        <i ng-show="screenForm.screenView.$error.required">Screen Shoot Image of Screen Page is Require.</i>
+                        <i ng-show="screenForm.screenView.$error.maxSize">File too large : max 1MB</i>
+                        <i ng-show="screenForm.screenView.$error.pattern">Only Select .ico,.jpg,.png type of Image</i>
+                        <md-button ng-click="pageMap.getDocument(pageMap.screenImage.docName)" download="{{pageMap.screenImage.docName}}" ng-if="pageMap.screenImage.docName" flex>{{pageMap.screenImage.docName}}</md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button ng-if="!pageMap.disableInput" class="md-raised md-primary" ng-click="pageMap.saveScreenView()">Save</md-button>
+                        <md-button ng-if="pageMap.disableInput" class="md-raised md-primary" ng-click="pageMap.disableInput = false;">Edit</md-button>
+                    </md-input-container>
                 </md-content>
             </form>
         </div>
-        <div flex-gt-sm="50" flex md-theme="altTheme">
+        <div flex-gt-sm="50" ng-if="pageMap.screenView._id" flex md-theme="altTheme" ng-repeat="type in pageMap.eventList">
             <md-toolbar layout="row" class="md-hue-3">
                 <div class="md-toolbar-tools">
-                    <span>Incoming Data</span>
-                    <md-button class="md-raised md-primary" layout-align="top right">Add</md-button>
+                    <span>{{type._id}}</span>
+                    <span flex></span>
+                    <md-button class="md-raised md-primary" layout-align="top right" ng-click="pageMap.showAddTaskPopup($event, type._id)">Add</md-button>
                 </div>
             </md-toolbar>
             <md-content>
                 <md-list flex>
-                    <md-list-item class="md-2-line" ng-repeat="phone in pageMap.activeScreenArray">
-                        <span>Incoming Data</span>
+                    <md-list-item class="md-2-line" ng-repeat="(key,task) in pageMap.taskArray[type._id]">
+                        <span>{{task.taskTitle}}</span>
+                        <span flex></span>
+                        <md-button class="md-raised md-primary" layout-align="top right" ng-click="pageMap.showAddTaskPopup($event, type._id, task)">Edit</md-button>
                     </md-list-item>
                 </md-list>
             </md-content>

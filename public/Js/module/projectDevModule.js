@@ -1,6 +1,9 @@
 angular.module('projectDev', ['ui.router', 'ngMaterial', 'ui-notification', 'ngFileUpload'])
     .config(['$mdThemingProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider', function($mdThemingProvider, $stateProvider, $urlRouterProvider, $httpProvider) {
         // Configure a dark theme with primary foreground yellow
+        var authCheck = ['serverRequestService', function(serverRequestService) {
+            serverRequestService.authCheck();
+        }];
         $mdThemingProvider.theme('docs-dark')
             .primaryPalette('yellow')
             .dark()
@@ -21,9 +24,14 @@ angular.module('projectDev', ['ui.router', 'ngMaterial', 'ui-notification', 'ngF
             url: '/signin',
             templateUrl: 'views/LoginSignUpPage.html',
             controller: 'loginSignupCtrl',
+            controllerAs: 'loginView',
             resolve: {
-                authVerify: function() {}
+                authVerify: authCheck
             }
+        });
+        $stateProvider.state('noAccessUser', {
+            url: '/noAccessUser',
+            templateUrl: 'views/noAccessUser.html'
         });
         $stateProvider.state('projectPanel', {
             url: '/projectPanel',
@@ -31,7 +39,7 @@ angular.module('projectDev', ['ui.router', 'ngMaterial', 'ui-notification', 'ngF
             controller: 'projectPanelCtrl',
             controllerAs: 'projectPanel',
             resolve: {
-                authVerify: function() {}
+                authVerify: authCheck
             }
         });
         $stateProvider.state('projectView', {
@@ -43,7 +51,7 @@ angular.module('projectDev', ['ui.router', 'ngMaterial', 'ui-notification', 'ngF
                 project: null
             },
             resolve: {
-                authVerify: function() {}
+                authVerify: authCheck
             }
         });
         $stateProvider.state('pageMap', {
@@ -55,7 +63,7 @@ angular.module('projectDev', ['ui.router', 'ngMaterial', 'ui-notification', 'ngF
                 project: null
             },
             resolve: {
-                authVerify: function() {}
+                authVerify: authCheck
             }
         });
         $httpProvider.defaults.headers.common['Access-Control-Allow-Origin'] = '*';

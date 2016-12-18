@@ -1,12 +1,14 @@
 angular.module('projectDev')
     .controller('projectViewCtrl', projectViewCtrl);
-projectViewCtrl.$inject = ['$scope', 'serverRequestService', '$stateParams','$location'];
+projectViewCtrl.$inject = ['serverRequestService', '$stateParams','$state'];
 // Project Dev Controller
-function projectViewCtrl($scope, serverRequestService, $stateParams, $location) {
-    if(!$stateParams.id || !$stateParams.project) {
-        $location.path('/projectPanel');
+function projectViewCtrl(serverRequestService, $stateParams, $state) {
+    if(!$stateParams.id) { // || !$stateParams.project
+        $state.go('projectPanel');
     }
-    var _THIS = this;
-    _THIS.project = {};
-    _THIS.project = angular.copy($stateParams.project);
+    var projectView = this;
+    serverRequestService.serverRequest('/checkProjectId/' + $stateParams.id, 'GET').then('',serverRequestService.errorById);
+    projectView.projectId = $stateParams.id;
+    projectView.headerText = 'Project View',
+    projectView.backState = serverRequestService.backState;
 }

@@ -1,0 +1,73 @@
+<md-dialog aria-label="Add Edit Task View" md-theme="docs-dark">
+    <md-dialog-content>
+        <form name="addEditTask.taskForm">
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Add Edit Task View</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="addEditTask.closePopup()">
+                        <md-icon md-svg-src="images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-content layout-gt-sm="column" layout-padding flex="100">
+                <div>
+                    <md-input-container>
+                        <label>Task Title</label>
+                        <input type="text" name="taskTitle" ng-model="addEditTask.task.taskTitle" md-maxlength="10" required>
+                    </md-input-container>
+                    <md-input-container>
+                        <label for="prority">Project Prority</label>
+                        <md-select name="prority" ng-model="addEditTask.task.prority" md-on-close="" data-md-container-class="selectdemoSelectHeader">
+                            <md-optgroup label="Project Prority">
+                                <md-option value="high">High</md-option>
+                                <md-option value="medium">Medium</md-option>
+                                <md-option value="low">Low</md-option>
+                            </md-optgroup>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <label for="phase">Task Phase</label>
+                        <md-select name="phase" ng-model="addEditTask.task.phase" md-on-close="" data-md-container-class="selectdemoSelectHeader">
+                            <md-optgroup label="Task Phase">
+                                <md-option value="dev">Dev</md-option>
+                                <md-option value="test">QC</md-option>
+                                <md-option value="publish">Publishing</md-option>
+                            </md-optgroup>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <label for="enddate">End Date</label>
+                        <md-datepicker name="enddate" ng-model="addEditTask.task.enddateCn" md-placeholder="Enter date" md-min-date="addEditTask.minDate"md-max-date="addEditTask.maxDate" ng-change="addEditTask.dateChange();" required></md-datepicker>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Task Remark</label>
+                        <textarea name="remark" ng-model="addEditTask.task.remark" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+                    </md-input-container>
+                    <md-input-container>
+                        <label for="status">Task Status</label>
+                        <md-select name="status" ng-model="addEditTask.task.status" md-on-close="" data-md-container-class="selectdemoSelectHeader">
+                            <md-optgroup label="Task Phase">
+                                <md-option value="complete">Complete</md-option>
+                                <md-option value="panding">Panding</md-option>
+                                <md-option value="hold">Hold</md-option>
+                            </md-optgroup>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <label for="developers">Select Dev</label>
+                        <md-select name="developers" ng-model="addEditTask.task.developers" md-on-close="" data-md-container-class="selectdemoSelectHeader" multiple required>
+                            <md-optgroup label="Select Dev">
+                                <md-option style="width: 300px;" ng-repeat=" dev in addEditTask.developerDataSource" ng-value="dev._id">{{dev.name}}</md-option>
+                            </md-optgroup>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button class="md-raised md-primary" ng-if="!addEditTask.addEditButtonFlag" ng-disabled="submitDisable" ng-click="addEditTask.createTask()">Create</md-button>
+                        <md-button class="md-raised md-primary" ng-if="addEditTask.addEditButtonFlag" ng-disabled="submitDisable" ng-click="addEditTask.editTask()">Edit</md-button>
+                    </md-input-container>
+                </div>
+            </md-content>
+        </form>
+    </md-dialog-content>
+</md-dialog>

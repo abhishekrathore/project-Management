@@ -1,3 +1,6 @@
+/* 
+1. Thrott link Programming (Read About this)
+*/
 var express = require('express'), // require express code
     bodyParser = require('body-parser'), // require body-parser code
     common = require('./common'), // require common file code
@@ -43,7 +46,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 60000,
+        maxAge: 600000,
         secure: false
     }
 }));
@@ -70,8 +73,8 @@ passport.use(new GoogleStrategy({
 ));
 // passport serialize user
 passport.serializeUser(function(user, done) {
-    console.log('serializeUser', user)
-    done(null, user.id);
+    console.log('serializeUser')
+    UserController.getUserDetail(user.emails[0].value, done);
 });
 // passport deserialize user
 passport.deserializeUser(function(id, done) {
@@ -83,17 +86,27 @@ passport.deserializeUser(function(id, done) {
 app.get('/userLogin', passport.authenticate('google', {
     scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read']
 }));
+app.get('/logout', function(req, res) {
+    req.session.destroy(function(err) {
+        var resultObj = {};
+        resultObj.status = 'unauthorized';
+        resultObj.result = {
+            message: 'Succefully Loggd out'
+        };
+        res.send(resultObj); //Inside a callback… bulletproof!
+    });
+});
 // User Collections Apis
 app.get('/userLoginCallback', passport.authenticate('google'), UserController.insertUpsertUser);
-app.get('/getUserWithoutAccess', isAuthenticate, UserController.getUserWithoutAccess);
-app.get('/giveAccessToUser', isAuthenticate, UserController.giveAccessToUser);
-app.get('/getDeveloperList', isAuthenticate, UserController.getDeveloperList);
-
+app.get('/getUserWithoutAccess', isAdminAuthenticate, UserController.getUserWithoutAccess);
+app.get('/giveAccessToUser', isAdminAuthenticate, UserController.giveAccessToUser);
+app.get('/getDeveloperList', isAdminAuthenticate, UserController.getDeveloperList);
 // Project Collections Apis
-app.post('/createNewProject', isAuthenticate, ProjectController.createNewProject);
+app.post('/createNewProject', isAdminAuthenticate, ProjectController.createNewProject);
 app.get('/getProjectDetailByProjectId/:id', isAuthenticate, ProjectController.getProjectDetailByProjectId);
-app.put('/editProjectDetail/:id', isAuthenticate, ProjectController.editProjectDetail);
+app.put('/editProjectDetail/:id', isAdminAuthenticate, ProjectController.editProjectDetail);
 app.get('/getActiveProject', isAuthenticate, ProjectController.getActiveProject);
+app.get('/checkProjectId/:id', isAuthenticate, ProjectController.checkProjectId);
 // Document Collections Apis
 app.post('/uploadDocs', isAuthenticate, upload.single('doc'), DocumentController.uploadDocument);
 app.get('/deleteDocument', isAuthenticate, DocumentController.deleteDocument);
@@ -104,17 +117,55 @@ app.get('/getActiveScreens/:id', isAuthenticate, PageMapsController.getActiveScr
 app.get('/getScreenDetail/:id', isAuthenticate, PageMapsController.getScreenDetail);
 app.put('/updateScreen/:id', isAuthenticate, PageMapsController.updateScreen);
 // Task Api
-app.get('/getTaskByScreenId/:id', isAuthenticate, TaskController.getTaskByScreenId);
+app.get('/getTaskByProjectOrScreenId/:projectId/:screenId', isAuthenticate, TaskController.getTaskByProjectOrScreenId);
+app.get('/getUserByProjectId/:id', isAuthenticate, ProjectController.getUserByProjectId);
 app.post('/saveTask', isAuthenticate, TaskController.saveTask);
 app.put('/editTask/:id', isAuthenticate, TaskController.editTask);
+app.get('/projectTaskView', isAuthenticate, TaskController.projectTaskView);
+// Check authenticate 
+app.get('/isAuthenticate', isAuthenticate, function(req, res) {
+    var resultObj = {};
+    resultObj.status = 'ok';
+    resultObj.result = {
+        message: 'Succefully Logged In',
+        accessFlag: req.user[0].accessflag
+    };
+    res.send(resultObj);
+});
+
+
 // For Check Start Server function
 app.listen(PORT, function() {
     console.log('Server Started In Rest Api on port ' + PORT);
 });
 
 function isAuthenticate(req, res, done) {
-    console.log('logo', req.user);
-    done();
-    // if (req.user) done()
-    // else res.send("Not Logged in")
+    console.log(req.user)
+    var resultObj = {};
+    if (req.user && req.user[0] && req.user[0].accessflag) {
+        resultObj.status = 'ok';
+         done();
+    } else if (req.user && req.user[0] && !req.user[0].accessflag) {
+        resultObj.status = 'noaccess';
+        resultObj.result = 'No Access this User';
+        res.send(resultObj)
+    } else {
+        resultObj.status = 'unauthorized';
+        res.send(resultObj)
+    }
+}
+
+function isAdminAuthenticate(req, res, done) {
+    var resultObj = {};
+    if (req.user && req.user[0].userrole === 'Admin') {
+        resultObj.status = 'ok';
+        done();
+    } else if (req.user && req.user[0].userrole !== 'Admin') {
+        resultObj.status = 'fail';
+        resultObj.result = 'This Api Only Access By Admin';
+        res.send(resultObj)
+    } else {
+        resultObj.status = 'unauthorized';
+        res.send(resultObj)
+    }
 }

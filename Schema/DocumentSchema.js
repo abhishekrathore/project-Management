@@ -17,7 +17,6 @@ var mongoose = require("mongoose"),
         },
         screenId: {
             type: Number,
-          //  ref: 'Project',
             default : null
         },
         deleteflag: {

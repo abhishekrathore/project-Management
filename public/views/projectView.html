@@ -1,15 +1,6 @@
- <md-toolbar class="">
-      <div class="md-toolbar-tools">
-        <md-button href="#/projectPanel" class="md-raised md-primary" md-colors="{background: 'red'}">Back</md-button>
-        <span flex></span>
-        <h2>
-          <span>{{projectView.project.projectName}}</span>
-        </h2>
-        <span flex></span>
-      </div>
-    </md-toolbar>
+<div project-header header-text = "projectView.headerText" is-back="true" back-state="projectPanel"> </div>
 <md-content class="page-container" style="text-align:center">
-  <md-button class="md-raised md-primary"  ui-sref="pageMap({ project: projectView.project, id : projectView.project._id })">Page Maps</md-button>
+  <md-button class="md-raised md-primary"  ui-sref="pageMap({id : projectView.projectId})">Page Maps</md-button>
   <md-button class="md-raised md-primary">Api Maps</md-button>
   <md-button class="md-raised md-primary">Resource Maps</md-button>
 </md-content>
