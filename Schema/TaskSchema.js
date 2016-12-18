@@ -21,8 +21,12 @@ var mongoose = require("mongoose"),
             type: String
         },
         prority: {
-            type: String,
-            default: 'high'
+            type: Number,
+            default: 2,
+            validate: {
+                validator: _prorityValidation,
+                message: 'Task Prority Should be have 0 for low, 1 for medium and 2 for high'
+            }
         },
         phase: {
             type: String,
@@ -67,4 +71,8 @@ function _dateValidator(value) {
 // function that validate the value is alpha numeric or not
 function _alphaNumericValidation(value) {
     return /^[a-zA-Z0-9\-\s]+$/.test(value);
+}
+
+function _prorityValidation (value) {
+    return value <= 2;
 }

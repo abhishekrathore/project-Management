@@ -9,8 +9,7 @@ function loginSignupCtrl(serverRequestService, $window, $state, $timeout) {
     loginView.OpenPopupWindow = _googleSignIn;
 
     function _googleSignIn() {
-        serverRequestService.serverRequest('/userLogin', 'GET');
-        popupRef = $window.open("https://accounts.google.com/o/oauth2/v2/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2FuserLoginCallback&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.profile.emails.read&client_id=702764497550-9dt3j01t9pdt0jqfhf44e3f0pcijo5cn.apps.googleusercontent.com", "popup", "width=300,height=200,left=10,top=150");
+        popupRef = $window.open('/userLogin', 'popup', 'width=300,height=200,left=10,top=150');
         _checkLogin()
     }
 

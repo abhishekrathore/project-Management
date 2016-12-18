@@ -101,6 +101,7 @@ function serverRequestService($http, $q, Upload, Notification, $state) {
         var defer = $q.defer();
         _THIS.serverRequest('/isAuthenticate', 'GET').then(function(res) {
             _THIS.accessFlag = res.result.accessFlag;
+            _THIS.userProfilePic = res.result.profileUrl;
             defer.resolve(res);
         }, function(res) {
             $state.go('signin');

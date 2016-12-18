@@ -79,11 +79,9 @@ function _saveTask(req, res) {
 // Update Task
 function _editTask(req, res) {
     var taskId = req.params.id;
-    console.log(req.body)
     Task.findByIdAndUpdate(taskId, {
         $set: req.body
     }, function(err, docs) {
-        console.log(err, docs)
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
@@ -96,58 +94,19 @@ function _editTask(req, res) {
     });
 }
 
-function _projectTaskView(req, res) {
-    var findObj = {
-        deleteflag: false,
-        developers: [new ObjectId("58554d8f850bca11705f6195")]
-    };
-    Task.find(findObj).sort({ enddate: -1, prority: -1 }).exec(function(err, docs) {
+// Show Task View 
+function _showTaskByProjectId(req, res) {
+    Task.find({ projectId: req.params.projectId }).sort({ enddate: 1, prority: -1 }).select({ '_id': '_id', 'taskTitle': 'taskTitle', 'phase': 'phase', 'prority': 'prority', 'enddate': 'enddate' }).exec(function(err, docs) {
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
+            res.send(resultObj);
         } else {
-            var resultData = {};
             resultObj.status = OK;
-            resultObj.result = {
-                task: docs
-            };
-        };
-        res.send(resultObj);
+            resultObj.result = docs;
+            res.send(resultObj);
+        }
     });
-    // Task.aggregate([{
-    //     $match: findObj
-    // }, { $sort: { 'enddate': '$enddate' } }, {
-    //     $group: {
-    //         _id: '$taskType',
-    //         task: {
-    //             $push: {
-    //                 "_id": "$_id",
-    //                 "taskTitle": "$taskTitle",
-    //                 "enddate": "$enddate",
-    //                 "projectId": "$projectId",
-    //                 "taskType": "$taskType",
-    //                 "remark": "$remark",
-    //                 "status": "$status",
-    //                 "developers": "$developers",
-    //                 "phase": "$phase",
-    //                 "prority": "$prority",
-    //                 "screenId": "$screenId"
-    //             }
-    //         }
-    //     }
-    // }], function(err, docs) {
-    //     if (err) {
-    //         resultObj.status = FAIL;
-    //         resultObj.result = err;
-    //     } else {
-    //         var resultData = {};
-    //         resultObj.status = OK;
-    //         resultObj.result = {
-    //             task: docs
-    //         };
-    //     };
-    //     res.send(resultObj);
-    // });
 }
 
 
@@ -156,5 +115,5 @@ module.exports = {
     getTaskByProjectOrScreenId: _getTaskByProjectOrScreenId,
     saveTask: _saveTask,
     editTask: _editTask,
-    projectTaskView: _projectTaskView
+    showTaskByProjectId: _showTaskByProjectId
 };

@@ -1,0 +1,39 @@
+<md-dialog aria-label="Add Edit Task View" md-theme="" flex="60">
+    <md-dialog-content>
+        <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Task View</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="projectTaskPrority.closePopup()">
+                        <md-icon md-svg-src="images/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+        <md-content layout-gt-sm="column" layout-padding flex="100" ng-if="projectTaskPrority.projectList.length === 0">
+        <h1>You Don't Have Any Project for View</h1>
+        </md-content>
+        <md-content layout-gt-sm="column" layout-padding flex="100" ng-repeat="(key, project) in projectTaskPrority.projectList">
+            <md-list layout="column" layout-align="center" ng-cloak>
+                <md-list-item >
+                    <md-button class="md-icon-button" aria-label="More" ng-click="projectTaskPrority.showTask(key)">
+                        <md-icon md-svg-icon="images/icons/ic_launch_black_24px.svg"></md-icon>
+                    </md-button>
+                    <p>{{project.projectName}}</p>
+                    <p>{{project.enddate | date }}</p>
+                    <p>{{project.projectPrority}}</p>
+                    <md-divider></md-divider>
+                </md-list-item>
+                <md-list-item ng-if="projectTaskPrority.showTaskFlag[project._id]" ng-repeat="task in projectTaskPrority.taskList[project._id]">
+                    <p>{{task.taskTitle}}</p>
+                    <p>{{task.enddate | date }}</p>
+                    <p>{{task.projectPrority}}</p>
+                    <md-divider></md-divider>
+                </md-list-item>
+                <md-list-item ng-if="projectTaskPrority.showTaskFlag[project._id] && projectTaskPrority.taskList[project._id].length === 0" >
+                    <p>This Project Dont have Any Task</p>
+                    <md-divider></md-divider>
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </md-dialog-content>
+</md-dialog>

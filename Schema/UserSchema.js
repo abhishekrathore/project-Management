@@ -14,6 +14,10 @@ var mongoose = require("mongoose"),
             type: String,
             default : 'Developer'
         },
+        profileImage : {
+            type: String,
+            default : null
+        },
         accessflag: {
             type: Boolean,
             default : false

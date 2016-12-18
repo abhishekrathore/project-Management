@@ -75,13 +75,12 @@ function _editProjectDetail(req, res) {
 function _getActiveProject(req, res) {
     var findObj = {
         deleteflag: false,
-    }, editFlag = true
-    if(req.user[0].userrole !== 'Admin') {
+    }, editFlag = true;
+    if(req.user && req.user[0].userrole !== 'Admin') {
         findObj.developers = [req.user[0]._id];
         editFlag = false;
     }
-    console.log(findObj)
-    Project.find(findObj).populate('logoImageId').exec(function(err, docs) {
+    Project.find(findObj).sort({ enddate: 1, projectPrority: -1 }).select({'_id': '_id','logoImageId': 'logoImageId', 'projectName': 'projectName', 'projectPrority':'projectPrority', 'enddate':'enddate'}).populate('logoImageId').exec(function(err, docs) {
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
@@ -104,7 +103,6 @@ function _getUserByProjectId (req, res) {
             resultObj.result = err;
             res.send(resultObj);
         } else {
-            console.log(docs)
             resultObj.status = OK;
             resultObj.result = docs.developers;
             res.send(resultObj);

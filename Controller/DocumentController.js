@@ -39,7 +39,6 @@ function _insertDocument(projectDoc, res, isLogo, isDocs, callbackObj) {
 }
 // Upload Doc at Server
 function _uploadDocument(req, res) {
-    console.log(req)
     if (req && req.file) {
         var absolutePath = path.join(path.dirname(require.main.filename), req.file.path)
         req.file.absolutePath = absolutePath;
@@ -52,11 +51,9 @@ function _uploadDocument(req, res) {
                 resultObj.status = FAIL;
                 resultObj.result = err;
                 res.send(resultObj);
-                console.log(err)
             } else {
                 resultObj.status = OK;
                 resultObj.result = docs;
-                console.log(docs)
                 res.send(resultObj);
             };
         });

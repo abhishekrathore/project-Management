@@ -1,5 +1,6 @@
-<div project-header header-text = "projectPanel.headerText" is-back="false"> </div>
+<div project-header header-text="projectPanel.headerText" is-back="false"> </div>
 <md-content class="page-container">
+    <md-button class="md-raised md-primary" ng-click="projectPanel.showProrityProjectTaskView($event);">Show Task Panel</md-button>
     <md-button class="md-raised md-primary" ng-if="projectPanel.editFlag" ng-click="projectPanel.showAddEditProjectPopup($event);">Add Project</md-button>
     <md-button ng-if="projectPanel.editFlag" class="md-raised md-primary" ng-click="projectPanel.toggleUserPanel('unAccessUserPanel');">Give Access to User</md-button>
     <md-content class="md-padding" layout-xs="row" layout="row">
@@ -12,7 +13,7 @@
                 </md-card-title>
                 <md-card-title-media>
                     <div class="md-media-lg card-media">
-                        <img src="images/icons/ic_insert_drive_file_24px.svg">
+                        <img ng-src="{{project.logoImageId.docPath}}">
                     </div>
                 </md-card-title-media>
                 <md-card-actions layout="row" layout-align="end center">
@@ -60,3 +61,4 @@
         </md-content>
     </md-sidenav>
 </section>
+

@@ -31,7 +31,10 @@ angular.module('projectDev', ['ui.router', 'ngMaterial', 'ui-notification', 'ngF
         });
         $stateProvider.state('noAccessUser', {
             url: '/noAccessUser',
-            templateUrl: 'views/noAccessUser.html'
+            templateUrl: 'views/noAccessUser.html',
+            resolve: {
+                authVerify: authCheck
+            }
         });
         $stateProvider.state('projectPanel', {
             url: '/projectPanel',

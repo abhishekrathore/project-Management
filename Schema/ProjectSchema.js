@@ -16,8 +16,12 @@ var mongoose = require("mongoose"),
             required: [true, 'Project Description is Require']
         },
         projectPrority: {
-            type: String,
-            default: 'high'
+            type: Number,
+            default: 2,
+            validate: {
+                validator: _prorityValidation,
+                message: 'Project Prority Should be have 0 for low, 1 for medium and 2 for high'
+            }
         },
         startdate: {
             type: Date,
@@ -63,6 +67,9 @@ module.exports = ProjectSchema;
 // function that validate the startDate and endDate
 function _dateValidator(value) {
     return value > this.startdate;
+}
+function _prorityValidation (value) {
+    return value <= 2;
 }
 
 // function that validate the value is alpha numeric or not

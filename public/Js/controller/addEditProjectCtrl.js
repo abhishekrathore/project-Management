@@ -12,7 +12,7 @@ function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items) 
     $scope.project.startdateCn = $scope.minDate;
     $scope.dateChange = _dateChange;
     $scope.dynamicTheme = 'docs-dark';
-    serverRequestService.serverRequest('getDeveloperList', 'GET').then(_setDeveloperDropdown);
+    serverRequestService.serverRequest('/getDeveloperList', 'GET').then(_setDeveloperDropdown);
     $scope.createEditProject = _saveProjectDetail;
     $scope.closePopup = _closePopup;
     $scope.deleteLogo = _deleteLogo;

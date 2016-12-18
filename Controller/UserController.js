@@ -29,6 +29,7 @@ function _getUserWithoutAccess(req, res) {
 }
 // Insert New User Function 
 function _insertUpsertUser(req, res) {
+    console.log(req.user)
     Users.findOne({
         useremail: req.user.emails[0].value
     }, function(err, docs) {
@@ -39,7 +40,8 @@ function _insertUpsertUser(req, res) {
         } else if (!docs) {
             var saveUser = new Users({
                 name: req.user.displayName,
-                useremail: req.user.emails[0].value
+                useremail: req.user.emails[0].value,
+                profileImage : req.user.photos[0].value
             });
             saveUser.save(function(err, docs) {
                 if (err) {
@@ -101,6 +103,11 @@ function _giveAccessToUser(req, res) {
         });
 }
 
+function _giveUserDetail (req, res) {
+    resultObj.status = FAIL;
+    resultObj.result = req.user[0];
+    res.send(resultObj);
+}
 // Get User Detail 
 function _getUserDetail(useremail, callback) {
     var findObj = {
@@ -121,5 +128,6 @@ module.exports = {
     insertUpsertUser: _insertUpsertUser,
     getDeveloperList: _getDeveloperList,
     giveAccessToUser: _giveAccessToUser,
-    getUserDetail : _getUserDetail 
+    getUserDetail : _getUserDetail,
+    giveUserDetail : _giveUserDetail
 };
