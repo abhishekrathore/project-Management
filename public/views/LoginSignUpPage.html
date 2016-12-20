@@ -1,30 +1,29 @@
 <div layout="column" layout-align="center center" layout-fill="layout-fill">
-  <div layout="column" class="loginBox md-whiteframe-z1">
-    <md-toolbar>
-      <h2 class="md-toolbar-tools"><span>Login</span></h2>
-    </md-toolbar>
-    <md-content layout="column" class="md-padding">
-      <md-input-container>
-        <label>EmailAddress</label>
-        <input type="email" ng-model="username"/>
-      </md-input-container>
-      <md-input-container>
-        <label>Password</label>
-        <input type="password" ng-model="password"/>
-      </md-input-container>
-      <div layout="row" layout-align="center center" style="padding-top:20px;">
-        <md-button class="md-raised md-primary">Login</md-button>
-        <div flex="flex"></div>
-        <md-button href="" md-no-ink="md-no-ink">Forgot Password</md-button>
-      </div>
-      <div layout="row" layout-align="center center" style="padding-top:20px;">
-       <md-button class="md-fab md-primary md-hue-2" aria-label="Facebook Login">
-            <md-icon md-svg-src=""></md-icon>
-        </md-button>
-        <md-button ng-click="loginView.OpenPopupWindow()" class="md-fab md-hue-2" aria-label="Google Login">
-            <md-icon md-svg-src=""></md-icon>
-        </md-button>
-      </div>
-    </md-content>
-  </div>
+    <div layout="column" class="loginBox md-whiteframe-z1">
+        <md-toolbar>
+            <h2 class="md-toolbar-tools"><span>Login</span></h2>
+        </md-toolbar>
+        <md-content layout="column" class="md-padding">
+            <md-input-container>
+                <label>EmailAddress</label>
+                <input type="email" ng-model="username" />
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input type="password" ng-model="password" />
+            </md-input-container>
+            <div layout="row" layout-align="center center" style="padding-top:20px;">
+                <md-button class="md-raised md-primary">Login</md-button>
+                <div flex="flex"></div>
+                <md-button href="" md-no-ink="md-no-ink">Forgot Password</md-button>
+            </div>
+            <md-button ng-click="loginView.OpenPopupWindow()" class="md-fab md-accent" aria-label="Google Sign In">
+                <md-icon md-svg-icon="images/icons/1482224570_80-google-plus.svg">
+                    <md-tooltip md-visible="" md-direction="">
+                        Google Sing In
+                    </md-tooltip>
+                </md-icon>
+            </md-button>
+        </md-content>
+    </div>
 </div>

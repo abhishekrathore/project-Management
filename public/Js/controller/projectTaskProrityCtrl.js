@@ -13,11 +13,10 @@ function projectTaskProrityCtrl(serverRequestService, projectList, $mdDialog) {
     function _showTask(index) {
     	var projectId = projectTaskPrority.projectList[index]._id;
     	projectTaskPrority.showTaskFlag[projectId] = !projectTaskPrority.showTaskFlag[projectId];
-    	console.log(projectTaskPrority.showTaskFlag[projectId])
         if (projectTaskPrority.showTaskFlag[projectId]) {
             serverRequestService.serverRequest('/showTaskByProjectId/' + projectId, 'GET').then(function(res) {
                 projectTaskPrority.taskList[projectId] = res.result;
-                console.log(projectTaskPrority.taskList)
+                projectTaskPrority.toggle = !projectTaskPrority.toggle;
             }, serverRequestService.errorById);
         }
 

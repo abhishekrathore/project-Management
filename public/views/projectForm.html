@@ -55,7 +55,7 @@
                 <md-input-container class="md-block">
                     <md-button ng-disabled="submitDisable" class="md-fab" aria-label="Upload Logo" ngf-select="projectForm.logoImage.$valid ? uploadLogo(): ''" ng-model="logoImageVar" name="logoImage" ngf-pattern="'image/*'" ngf-accept="'.ico,.jpg,.png'" ngf-max-size="1MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}">
                         <md-icon md-svg-src="images/icons/ic_file_upload_black_24px.svg"></md-icon>
-                        <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
+                        <md-tooltip md-visible="" md-direction="">
                             Upload Logo
                         </md-tooltip>
                     </md-button>
@@ -69,7 +69,7 @@
                 <md-input-container class="md-block">
                     <md-button ng-disabled="submitDisable" class="md-fab" aria-label="Upload Document" ngf-select="projectForm.documentArray.$valid ? uploadDocs(): ''" ng-model="documentInput" name="documentArray" ngf-max-size="5MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}">
                         <md-icon md-svg-src="images/icons/ic_file_upload_black_24px.svg"></md-icon>
-                        <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
+                        <md-tooltip md-visible="" md-direction="">
                             Upload Document
                         </md-tooltip>
                     </md-button>

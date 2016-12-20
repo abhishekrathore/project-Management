@@ -25,8 +25,6 @@ function projectPanelCtrl(serverRequestService, $mdDialog, $q, $mdSidenav, $mdBo
             locals : {
                 projectList : projectPanel.projectDataSource
             }
-        }).then(function(clickedItem) {
-            console.log(clickedItem);
         });
     }
     // Give access to developer user

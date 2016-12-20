@@ -8,8 +8,12 @@
         <md-button class="md-raised md-primary" md-theme="{{pageMap.defaultActive}}" ng-click="pageMap.renderNewScreen()">Add New Screen</md-button>
     </md-sidenav>
     <md-content flex layout-padding>
-        <md-button class="md-fab" aria-label="" ng-click="pageMap.toggleSideNav('AddScreenPanel')">
-            <md-icon md-svg-src="images/icons/ic_list_black_24px.svg"></md-icon>
+        <md-button ng-click="pageMap.toggleSideNav('AddScreenPanel')" class="md-icon-button md-primary" aria-label="Show Left Panel">
+            <md-icon md-svg-icon="images/icons/ic_list_black_24px.svg">
+                <md-tooltip md-visible="" md-direction="">
+                    Show Left Panel
+                </md-tooltip>
+            </md-icon>
         </md-button>
         <div layout="column" layout-align="top left">
             <form name="screenForm">
@@ -42,19 +46,38 @@
                 <div class="md-toolbar-tools">
                     <span>{{type._id}}</span>
                     <span flex></span>
-                    <md-button class="md-raised md-primary" layout-align="top right" ng-click="pageMap.showAddTaskPopup($event, type._id)">Add</md-button>
+                    <md-button ng-click="pageMap.showAddTaskPopup($event, type._id)" class="md-icon-button md-primary" aria-label="Add">
+                        <md-icon md-svg-icon="images/icons/plus.svg">
+                            <md-tooltip md-visible="" md-direction="">
+                                Add
+                            </md-tooltip>
+                        </md-icon>
+                    </md-button>
                 </div>
             </md-toolbar>
             <md-content>
                 <md-list flex>
                     <md-list-item class="md-2-line" ng-repeat="(key,task) in pageMap.taskArray[type._id]">
+                        <label>Title : </label>
                         <span>{{task.taskTitle}}</span>
                         <span flex></span>
-                        <md-button class="md-raised md-primary" layout-align="top right" ng-click="pageMap.showAddTaskPopup($event, type._id, task)">Edit</md-button>
+                        <label>Status : </label>
+                        <span>{{task.status}}</span>
+                        <span flex></span>
+                        <label>End Date : </label>
+                        <span>{{task.enddate | date }}</span>
+                        <span flex></span>
+                        <md-button ng-click="pageMap.showAddTaskPopup($event, type._id, task)" class="md-icon-button md-primary" aria-label="Edit">
+                            <md-icon md-svg-icon="images/icons/ic_mode_edit_black_24px.svg">
+                                <md-tooltip md-visible="" md-direction="">
+                                    Edit
+                                </md-tooltip>
+                            </md-icon>
+                        </md-button>
+                        <md-divider></md-divider>
                     </md-list-item>
                 </md-list>
             </md-content>
         </div>
     </md-content>
-
 </section>

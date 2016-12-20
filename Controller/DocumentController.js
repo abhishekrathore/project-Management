@@ -43,8 +43,8 @@ function _uploadDocument(req, res) {
         var absolutePath = path.join(path.dirname(require.main.filename), req.file.path)
         req.file.absolutePath = absolutePath;
         var saveDocument = new Document({
-            docPath : absolutePath,
-            docName : req.file.filename
+            docPath: absolutePath,
+            docName: req.file.filename
         });
         saveDocument.save(function(err, docs) {
             if (err) {
@@ -59,23 +59,17 @@ function _uploadDocument(req, res) {
         });
     } else {
         resultObj.status = FAIL;
-        resultObj.result = 'Server Error';    
+        resultObj.result = 'Server Error';
         res.send(resultObj);
     }
 }
 
 // Get Document 
 function _getDocument(req, res) {
-    fs.readFile('images/' + req.params.filename, function(err, data) {
-        if (err) {
-            resultObj.status = FAIL;
-            resultObj.result = err;
-        } else {
-            resultObj.status = OK;
-            resultObj.result = data;
-        }
-        res.send(resultObj);
-    });
+    var file = 'images/' +  req.params.filename;
+    var filename = path.basename(file);
+    var filestream = fs.createReadStream(file);
+    filestream.pipe(res);
 }
 // Delete Document
 function _deleteDocument(req, res) {

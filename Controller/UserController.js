@@ -29,7 +29,6 @@ function _getUserWithoutAccess(req, res) {
 }
 // Insert New User Function 
 function _insertUpsertUser(req, res) {
-    console.log(req.user)
     Users.findOne({
         useremail: req.user.emails[0].value
     }, function(err, docs) {

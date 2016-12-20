@@ -1,13 +1,13 @@
 angular.module('projectDev')
     .service('serverRequestService', serverRequestService);
-serverRequestService.$inject = ['$http', '$q', 'Upload', 'Notification', '$state'];
+serverRequestService.$inject = ['$http', '$q', 'Upload', 'Notification', '$state', '$mdDialog'];
 // Project Dev Controller
-function serverRequestService($http, $q, Upload, Notification, $state) {
+function serverRequestService($http, $q, Upload, Notification, $state, $mdDialog) {
     var _THIS = this,
-    OK = 'ok',
-    FAIL = 'fail'
+        OK = 'ok',
+        FAIL = 'fail'
     UNAUTHORIZED = 'unauthorized',
-    NOACCESS = 'noaccess';
+        NOACCESS = 'noaccess';
     _THIS.deleteDocument = _deleteDocument;
     _THIS.upload = _upload;
     _THIS.getDocument = _getDocument;
@@ -17,26 +17,27 @@ function serverRequestService($http, $q, Upload, Notification, $state) {
     _THIS.authCheck = _authCheck;
     _THIS.errorById = _errorById;
     // Server Error Function
-    function _serverError (res) {
-    };
+    function _serverError(res) {};
     // Method for Do Server Request
-    function _serverRequest (url, method, postData, isAuthenticateFlag) {
-    	var defer = $q.defer();
-    	var data = postData || '';
+    function _serverRequest(url, method, postData, isAuthenticateFlag) {
+        var defer = $q.defer();
+        var data = postData || '';
         $http({
             method: method,
             url: url,
-            data : data,
-            headers : {
-                'Content-Type' : 'application/json'
+            data: data,
+            headers: {
+                'Content-Type': 'application/json'
             }
         }).success(function(res) {
-        	if(res.status === OK){
-        		defer.resolve(res);
-        	} else if(res.status === UNAUTHORIZED && !isAuthenticateFlag){
+            if (res.status === OK) {
+                defer.resolve(res);
+            } else if (res.status === UNAUTHORIZED && !isAuthenticateFlag) {
+                $mdDialog.cancel();
                 $state.go('signin')
-        		defer.reject(res);
-        	} else if(res.status === NOACCESS){
+                defer.reject(res);
+            } else if (res.status === NOACCESS) {
+                $mdDialog.cancel();
                 $state.go('noAccessUser');
                 defer.resolve(res);
             } else {
@@ -72,8 +73,12 @@ function serverRequestService($http, $q, Upload, Notification, $state) {
                 'Content-Type': undefined
             };
             Upload.upload(data).then(function(res) {
-                if (res && res.data && res.data.status === 'ok') {
+                if (res && res.data && res.data.status === OK) {
                     defer.resolve(res.data.result);
+                } else if (res && res.data && res.data.status === UNAUTHORIZED){
+                    $mdDialog.cancel();
+                    $state.go('signin')
+                    defer.resolve(null);
                 } else {
                     defer.resolve(null);
                 }
@@ -82,22 +87,29 @@ function serverRequestService($http, $q, Upload, Notification, $state) {
                 defer.resolve(null);
             }, function(evt) {
                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                console.log('progress: ', progressPercentage, '% ', evt.config.data.logo);
             });
         }
         return defer.promise;
     };
     // Get Doc Data
-    function _getDocument(filePath) {
-        _THIS.serverRequest('files/' + filePath, 'GET').then(_getDocumentsResponse);
-    }
-    // function for Get Documents Response
-    function _getDocumentsResponse(res) {
-        console.log(res.result);
+    function _getDocument(fileName) {
+        var defer = $q.defer();
+        $http({
+            method: 'GET',
+            url: 'files/' + fileName,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).success(function(res) {
+            defer.resolve(res);
+        }).error(function(res, status, headers, config) {
+            defer.reject(res);
+        });
+        return defer.promise;
     }
 
     // user Auth Service 
-    function _authCheck () {
+    function _authCheck() {
         var defer = $q.defer();
         _THIS.serverRequest('/isAuthenticate', 'GET').then(function(res) {
             _THIS.accessFlag = res.result.accessFlag;
@@ -119,10 +131,10 @@ function serverRequestService($http, $q, Upload, Notification, $state) {
     }
 
     // Error By ID
-    function _errorById (res) {
-        if(res.status === 'fail' && res.result.kind === 'ObjectId') {
+    function _errorById(res) {
+        if (res.status === 'fail' && res.result.kind === 'ObjectId') {
             $state.go('projectPanel');
         }
     }
-    
+
 }
