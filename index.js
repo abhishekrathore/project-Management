@@ -68,7 +68,7 @@ passport.use(new GoogleStrategy({
         passReqToCallback: true
     },
     function(request, accessToken, refreshToken, profile, done) {
-        done(null, profile);
+        UserController.insertUpsertUser(profile, done);
     }
 ));
 // passport serialize user
@@ -97,12 +97,19 @@ app.get('/logout', function(req, res) {
     });
 });
 // User Collections Apis
-app.get('/userLoginCallback', passport.authenticate('google'), UserController.insertUpsertUser);
+app.get('/userLoginCallback', passport.authenticate('google'), function(req, res) {
+    var resultObj = {};
+    resultObj.status = 'ok';
+    resultObj.result = {
+        message: 'Succefully Loggd In'
+    };
+    res.send(resultObj);
+});
 app.get('/getUserWithoutAccess', isAdminAuthenticate, UserController.getUserWithoutAccess);
 app.get('/giveAccessToUser', isAdminAuthenticate, UserController.giveAccessToUser);
 app.get('/getDeveloperList', isAdminAuthenticate, UserController.getDeveloperList);
 app.get('/giveUserDetail', isAuthenticate, UserController.giveUserDetail)
-// Project Collections Apis
+    // Project Collections Apis
 app.post('/createNewProject', isAdminAuthenticate, ProjectController.createNewProject);
 app.get('/getProjectDetailByProjectId/:id', isAuthenticate, ProjectController.getProjectDetailByProjectId);
 app.put('/editProjectDetail/:id', isAdminAuthenticate, ProjectController.editProjectDetail);
@@ -130,7 +137,7 @@ app.get('/isAuthenticate', isAuthenticate, function(req, res) {
     resultObj.result = {
         message: 'Succefully Logged In',
         accessFlag: req.user[0].accessflag,
-        profileUrl : req.user[0].profileImage
+        profileUrl: req.user[0].profileImage
     };
     res.send(resultObj);
 });
@@ -145,15 +152,15 @@ function isAuthenticate(req, res, done) {
     var resultObj = {};
     if (req.user && req.user[0] && req.user[0].accessflag) {
         resultObj.status = 'ok';
-         done();
+        done();
     } else if (req.user && req.user[0] && !req.user[0].accessflag) {
         resultObj.status = 'noaccess';
         resultObj.result = 'No Access this User';
         resultObj.result = {
-        message: 'No Access this User',
-        accessFlag: req.user[0].accessflag,
-        profileUrl : req.user[0].profileImage
-    };
+            message: 'No Access this User',
+            accessFlag: req.user[0].accessflag,
+            profileUrl: req.user[0].profileImage
+        };
         res.send(resultObj)
     } else {
         resultObj.status = 'unauthorized';

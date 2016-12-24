@@ -6,7 +6,7 @@ angular.module('projectDev')
 	    scope : {
 	    	headerText : '=',
 	    	isBack : '=',
-	    	backEvent : '@'
+	    	backEvent : '='
 	    },
 	    controller: 'projectHeaderCtrl',
         controllerAs : 'projectHeader',

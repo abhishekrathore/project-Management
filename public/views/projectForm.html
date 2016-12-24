@@ -9,18 +9,11 @@
         </div>
     </md-toolbar>
     <form name="projectForm">
-        <md-content md-theme="{{dynamicTheme}}" layout-gt-sm="row" layout-padding flex="100">
+        <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding flex="100">
             <div>
                 <md-input-container>
                     <label>Project Name</label>
                     <input type="text" name="projectName" ng-model="project.projectName" md-maxlength="10" required>
-                </md-input-container>
-                <md-input-container>
-                    <md-radio-group ng-model="dynamicTheme">
-                        <md-radio-button value="altTheme" class="md-primary">altTheme</md-radio-button>
-                        <md-radio-button value="dark-grey" class="md-primary">Dark Grey</md-radio-button>
-                        <md-radio-button value="docs-dark">Docs dark</md-radio-button>
-                    </md-radio-group>
                 </md-input-container>
                 <md-input-container class="md-block">
                     <label>Project Description</label>

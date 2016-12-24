@@ -1,4 +1,4 @@
-PageMaps = require("../Model/PageMaps"); // Require User Molel file
+var PageMaps = require("../Model/PageMaps"); // Require User Molel file
 var resultObj = {
         status: ''
     },

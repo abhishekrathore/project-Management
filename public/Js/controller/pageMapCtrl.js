@@ -8,6 +8,12 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $state, $mdDial
     }
     var pageMap = this;
     pageMap.headerText = 'Project Screens';
+    pageMap.backEvent = {
+        stateName : 'projectView',
+        paramObj : {
+            id : $stateParams.id
+        }
+    };
     pageMap.project = {};
     pageMap.screenView = {};
     pageMap.screenView.screenName = '';

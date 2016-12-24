@@ -4,7 +4,6 @@ var resultObj = {
     },
     FAIL = 'fail',
     OK = 'ok';
-//Q = require("q");
 // Make a function for find user by querry
 function _getUserWithoutAccess(req, res) {
     // search functionlity work on only on model not document
@@ -28,19 +27,19 @@ function _getUserWithoutAccess(req, res) {
     });
 }
 // Insert New User Function 
-function _insertUpsertUser(req, res) {
+function _insertUpsertUser(profile, callback) {
     Users.findOne({
-        useremail: req.user.emails[0].value
+        useremail: profile.emails[0].value
     }, function(err, docs) {
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
-            res.send(resultObj);
+            callback(null, profile);
         } else if (!docs) {
             var saveUser = new Users({
-                name: req.user.displayName,
-                useremail: req.user.emails[0].value,
-                profileImage : req.user.photos[0].value
+                name: profile.displayName,
+                useremail: profile.emails[0].value,
+                profileImage : profile.photos[0].value
             });
             saveUser.save(function(err, docs) {
                 if (err) {
@@ -50,12 +49,12 @@ function _insertUpsertUser(req, res) {
                     resultObj.status = OK;
                     resultObj.result = docs;
                 };
-                res.send(resultObj);
+                callback(null, profile);
             });
         } else {
             resultObj.status = OK;
             resultObj.result = docs;
-            res.send(resultObj);
+            callback(null, profile);
         }
     });
 }

@@ -1,13 +1,12 @@
+
 Document = require("../Model/Document"); // Require User Molel file
-var file = require('file-system'),
-    path = require('path'),
+var path = require('path'),
     fs = require('fs'),
     resultObj = {
         status: ''
     },
     FAIL = 'fail',
     OK = 'ok';
-//Q = require("q");
 // Make a function for find user by querry
 function _getDocumentByProjectId(req, res) {
     var findObj = {
@@ -21,7 +20,7 @@ function _getDocumentByProjectId(req, res) {
         } else {
             resultObj.status = OK;
             resultObj.result = docs;
-        };
+        }
         res.send(resultObj);
     });
 }
@@ -33,14 +32,14 @@ function _insertDocument(projectDoc, res, isLogo, isDocs, callbackObj) {
             resultObj.result = err;
             res.send(resultObj);
         } else {
-            callbackObj.cb(docs, res, callbackObj, data);
-        };
+            callbackObj.cb(docs, res, callbackObj);
+        }
     });
 }
 // Upload Doc at Server
 function _uploadDocument(req, res) {
     if (req && req.file) {
-        var absolutePath = path.join(path.dirname(require.main.filename), req.file.path)
+        var absolutePath = path.join(path.dirname(require.main.filename), req.file.path);
         req.file.absolutePath = absolutePath;
         var saveDocument = new Document({
             docPath: absolutePath,
@@ -55,7 +54,7 @@ function _uploadDocument(req, res) {
                 resultObj.status = OK;
                 resultObj.result = docs;
                 res.send(resultObj);
-            };
+            }
         });
     } else {
         resultObj.status = FAIL;
@@ -66,17 +65,16 @@ function _uploadDocument(req, res) {
 
 // Get Document 
 function _getDocument(req, res) {
-    var file = 'images/' +  req.params.filename;
-    var filename = path.basename(file);
+    var file = 'images/' + req.params.filename;
     var filestream = fs.createReadStream(file);
     filestream.pipe(res);
 }
 // Delete Document
 function _deleteDocument(req, res) {
     var imagePath = process.env.IMAGE_PATH || 'images';
-    documentName = req.query.name;
+    var documentName = req.query.name;
     if (documentName) {
-        fs.stat(imagePath, function(err, stats) {
+        fs.stat(imagePath, function(err) {
             if (err) {
                 resultObj.status = FAIL;
                 resultObj.result = req.err;
@@ -88,7 +86,7 @@ function _deleteDocument(req, res) {
                         resultObj.result = req.err;
                         res.send(resultObj);
                     } else {
-                        _updateDocCollection(req, res)
+                        _updateDocCollection(req, res);
                     }
                 });
             }
@@ -106,7 +104,7 @@ function _updateDocCollection(req, res) {
     if (req.query.id) {
         Document.findOneAndRemove({
             _id: req.query.id
-        }, function(err, docs) {
+        }, function(err) {
             res.send(resultObj);
         });
     } else {
