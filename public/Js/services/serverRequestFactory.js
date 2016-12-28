@@ -1,8 +1,8 @@
 angular.module('projectDev')
     .service('serverRequestService', serverRequestService);
-serverRequestService.$inject = ['$http', '$q', 'Upload', 'Notification', '$state', '$mdDialog'];
+serverRequestService.$inject = ['$http', '$q', 'Upload', 'Notification', '$state', '$mdDialog', 'SERVER_REQUEST_SERVICE_API_OBJECT'];
 // Project Dev Controller
-function serverRequestService($http, $q, Upload, Notification, $state, $mdDialog) {
+function serverRequestService($http, $q, Upload, Notification, $state, $mdDialog, SERVER_REQUEST_SERVICE_API_OBJECT) {
     var _THIS = this,
         OK = 'ok',
         FAIL = 'fail'
@@ -53,7 +53,7 @@ function serverRequestService($http, $q, Upload, Notification, $state, $mdDialog
     // Delete Selected Doc
     function _deleteDocument(selectedName, id) {
         var defer = $q.defer();
-        var url = 'deleteDocument?name=' + selectedName + '&id=' + id;
+        var url = SERVER_REQUEST_SERVICE_API_OBJECT.deleteDocument + selectedName + '&id=' + id;
         var deleteDocumentReq = _THIS.serverRequest(url, 'GET').then(function(res) {
             defer.resolve(res);
         }, function(res) {
@@ -96,7 +96,7 @@ function serverRequestService($http, $q, Upload, Notification, $state, $mdDialog
         var defer = $q.defer();
         $http({
             method: 'GET',
-            url: 'files/' + fileName,
+            url: SERVER_REQUEST_SERVICE_API_OBJECT.getDocument + fileName,
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -111,7 +111,7 @@ function serverRequestService($http, $q, Upload, Notification, $state, $mdDialog
     // user Auth Service 
     function _authCheck() {
         var defer = $q.defer();
-        _THIS.serverRequest('/isAuthenticate', 'GET').then(function(res) {
+        _THIS.serverRequest(SERVER_REQUEST_SERVICE_API_OBJECT.isAuthenticate, 'GET').then(function(res) {
             _THIS.accessFlag = res.result.accessFlag;
             _THIS.userProfilePic = res.result.profileUrl;
             defer.resolve(res);

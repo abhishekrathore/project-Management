@@ -69,6 +69,24 @@ angular.module('projectDev', ['ui.router', 'ngMaterial', 'ui-notification', 'ngF
                 authVerify: authCheck
             }
         });
+        $stateProvider.state('taskPrority', {
+            url: '/taskPrority',
+            templateUrl: 'views/projectTaskProrityView.html',
+            controller: 'projectTaskProrityCtrl',
+            controllerAs : 'projectTaskPrority',
+            resolve: {
+                authVerify: authCheck
+            }
+        });
+        $stateProvider.state('taskLogger', {
+            url: '/taskLogger',
+            templateUrl: 'views/projectTaskLogger.html',
+            controller: 'projectTaskLoggerCtrl',
+            controllerAs : 'projectTaskLogger',
+            resolve: {
+                authVerify: authCheck
+            }
+        });
         $httpProvider.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
         $urlRouterProvider.otherwise('/projectPanel');
     }]);

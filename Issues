@@ -1,4 +1,26 @@
 Issues 
-1. First Time Login
-2. Image or Doc file not be download now
-3. 
+
+1. Image or Doc file not be download now (panding)
+2. Upload Task for Date (done)
+3. At update for end date need next time (done)
+4. API denote in constant file (done)
+5. Not show tomorrow next tasks 
+6. Make Task Logger View 
+
+
+{
+	
+	title
+	dev
+	start
+}
+
+
+{
+    projectID
+    sceneID
+	type : title
+	old : "sdsad"
+	new  : "asdasdaa"
+
+}

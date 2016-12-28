@@ -1,35 +1,19 @@
 angular.module('projectDev')
     .controller('projectPanelCtrl', projectPanelCtrl);
-projectPanelCtrl.$inject = ['serverRequestService', '$mdDialog', '$q', '$mdSidenav', '$mdBottomSheet'];
+projectPanelCtrl.$inject = ['serverRequestService', '$mdDialog', '$q', '$mdSidenav', '$mdBottomSheet', 'PROJET_PANEL_CTRL_API_OBJECT'];
 // Project Dev Controller
-function projectPanelCtrl(serverRequestService, $mdDialog, $q, $mdSidenav, $mdBottomSheet) {
+function projectPanelCtrl(serverRequestService, $mdDialog, $q, $mdSidenav, $mdBottomSheet, PROJET_PANEL_CTRL_API_OBJECT) {
     var projectPanel = this;
-    projectPanel.headerText = 'Project Panel'
+    projectPanel.headerText = 'Project Panel';
     projectPanel.editFlag = false;
     projectPanel.toggleUserPanel = _toggleUserPanel;
     projectPanel.giveAccessToUser = _giveAccessToUser;
     projectPanel.showAddEditProjectPopup = _showAddEditProjectPopup;
-    projectPanel.showProrityProjectTaskView = _showProrityProjectTaskView;
-    serverRequestService.serverRequest('getActiveProject', 'GET').then(_getActiveProject);
-    serverRequestService.serverRequest('getUserWithoutAccess', 'GET').then(_getUserWithoutAccess);
-    // Show Task Panel
-    function _showProrityProjectTaskView(ev) {
-        $mdDialog.show({
-            templateUrl: 'views/projectTaskProrityView.html',
-            targetEvent: ev,
-            controller: 'projectTaskProrityCtrl',
-            controllerAs : 'projectTaskPrority',
-            parent: angular.element(document.body),
-            clickOutsideToClose: true,
-            fullscreen: true,
-            locals : {
-                projectList : projectPanel.projectDataSource
-            }
-        });
-    }
+    serverRequestService.serverRequest(PROJET_PANEL_CTRL_API_OBJECT.getActiveProject, 'GET').then(_getActiveProject);
+    serverRequestService.serverRequest(PROJET_PANEL_CTRL_API_OBJECT.getUserWithoutAccess, 'GET').then(_getUserWithoutAccess);
     // Give access to developer user
     function _giveAccessToUser(key) {
-        serverRequestService.serverRequest('giveAccessToUser?id=' + projectPanel.userWithoutAccess[key]._id, 'GET').then(_updateUnaccessUserList(key));
+        serverRequestService.serverRequest(PROJET_PANEL_CTRL_API_OBJECT.giveAccessToUser + projectPanel.userWithoutAccess[key]._id, 'GET').then(_updateUnaccessUserList(key));
     }
     // update list of un access user/developer
     function _updateUnaccessUserList(key) {
@@ -68,7 +52,7 @@ function projectPanelCtrl(serverRequestService, $mdDialog, $q, $mdSidenav, $mdBo
                 projectPanel.status = 'You said the information was "' + answer + '".';
             }, function() {
                 projectPanel.status = 'You cancelled the dialog.';
-                serverRequestService.serverRequest('getActiveProject', 'GET').then(_getActiveProject);
+                serverRequestService.serverRequest(PROJET_PANEL_CTRL_API_OBJECT.getActiveProject, 'GET').then(_getActiveProject);
             });
     }
 }

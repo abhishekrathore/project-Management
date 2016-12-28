@@ -1,8 +1,8 @@
 angular.module('projectDev')
     .controller('addEditProjectCtrl', addEditProjectCtrl);
-addEditProjectCtrl.$inject = ['$scope', 'serverRequestService', '$mdDialog', '$q', 'items'];
+addEditProjectCtrl.$inject = ['$scope', 'serverRequestService', '$mdDialog', '$q', 'items', 'ADD_EDIT_PROJECT_CTRL_API_OBJECT'];
 // Project Dev Controller
-function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items) {
+function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items, ADD_EDIT_PROJECT_CTRL_API_OBJECT) {
     var _THIS = this;
     $scope.project = {};
     $scope.project.documentArray = [];
@@ -11,7 +11,7 @@ function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items) 
     $scope.minDate = new Date();
     $scope.project.startdateCn = $scope.minDate;
     $scope.dateChange = _dateChange;
-    serverRequestService.serverRequest('/getDeveloperList', 'GET').then(_setDeveloperDropdown);
+    serverRequestService.serverRequest(ADD_EDIT_PROJECT_CTRL_API_OBJECT.getDeveloperList, 'GET').then(_setDeveloperDropdown);
     $scope.createEditProject = _saveProjectDetail;
     $scope.closePopup = _closePopup;
     $scope.deleteLogo = _deleteLogo;
@@ -26,7 +26,7 @@ function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items) 
     function _fillProjectDetail() {
         if (items) {
             $scope.addEditButtonFlag = true;
-            serverRequestService.serverRequest('/getProjectDetailByProjectId/' + items, 'GET').then(_getProjectDetail);
+            serverRequestService.serverRequest(ADD_EDIT_PROJECT_CTRL_API_OBJECT.getProjectDetailByProjectId + items, 'GET').then(_getProjectDetail);
         }
     }
     // Success fucntion of Get Project Detail Function
@@ -34,6 +34,7 @@ function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items) 
         $scope.project = res.result;
         $scope.project.startdateCn = new Date(res.result.startdate);
         $scope.project.enddateCn = new Date(res.result.enddate);
+        $scope.minDate = new Date(res.result.enddate);
         $scope.documentArray = angular.copy($scope.project.documentArray);
         $scope.logoImage = $scope.project.logoImageId;
         $scope.projectForm.$setUntouched();
@@ -45,13 +46,15 @@ function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items) 
     }
     // _dateChange Function
     function _dateChange(argument) {
-        $scope.minDate = $scope.project.startdateCn;
+        if (!items) {
+            $scope.minDate = $scope.project.startdateCn;
+        }
     }
     // Upload Logo function for click
     function _uploadLogo() {
         $scope.deleteLogoFlag = true;
         $scope.submitDisable = true;
-        serverRequestService.upload($scope.logoImageVar, '/uploadDocs', 'doc').then(function(res) {
+        serverRequestService.upload($scope.logoImageVar, ADD_EDIT_PROJECT_CTRL_API_OBJECT.uploadDocs, 'doc').then(function(res) {
             if (res) {
                 $scope.project.logoImageId = res._id;
             }
@@ -67,7 +70,7 @@ function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items) 
     function _uploadDocs() {
         $scope.deleteLogoFlag = true;
         $scope.submitDisable = true;
-        serverRequestService.upload($scope.documentInput, '/uploadDocs', 'doc').then(function(res) {
+        serverRequestService.upload($scope.documentInput, ADD_EDIT_PROJECT_CTRL_API_OBJECT.uploadDocs, 'doc').then(function(res) {
             if (res) {
                 $scope.submitDisable = false;
                 $scope.documentArray.push(angular.copy(res));
@@ -102,7 +105,7 @@ function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items) 
         if ($scope.projectForm.$valid) {
             $scope.project.startdate = $scope.project.startdateCn;
             $scope.project.enddate = $scope.project.enddateCn;
-            serverRequestService.serverRequest('createNewProject', 'POST', $scope.project).then(function(res) {
+            serverRequestService.serverRequest(ADD_EDIT_PROJECT_CTRL_API_OBJECT.createNewProject, 'POST', $scope.project).then(function(res) {
                 serverRequestService.showNotification('success', 'Porject Save successfully', 'Save', 2000);
                 $mdDialog.cancel();
             }, function(res) {
@@ -120,13 +123,15 @@ function addEditProjectCtrl($scope, serverRequestService, $mdDialog, $q, items) 
         if ($scope.projectForm.$valid) {
             $scope.project.startdate = $scope.project.startdateCn;
             $scope.project.enddate = $scope.project.enddateCn;
-            serverRequestService.serverRequest('editProjectDetail/' + items, 'PUT', $scope.project).then(function(res) {
+            serverRequestService.serverRequest(ADD_EDIT_PROJECT_CTRL_API_OBJECT.editProjectDetail + items, 'PUT', $scope.project).then(function(res) {
                 serverRequestService.showNotification('success', 'Porject Update successfully', 'Update', 2000);
                 $mdDialog.cancel();
             }, function(res) {
-                angular.forEach(res.result.errors, function(value) {
-                    serverRequestService.showNotification('error', value.message, value.path, 4000);
-                });
+                if (res && res.result && res.result.errors) {
+                    angular.forEach(res.result.errors, function(value) {
+                        serverRequestService.showNotification('error', value.message, value.path, 4000);
+                    });
+                }
             });
         } else {
             $scope.projectForm.$setSubmitted();

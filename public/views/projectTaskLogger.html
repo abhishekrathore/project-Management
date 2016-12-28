@@ -1,0 +1,43 @@
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    width: 100px;
+}
+</style>
+<div project-header header-text="projectTaskLogger.headerText" is-back="true" back-event="projectTaskLogger.backEvent"> </div>
+<md-content class="page-container">
+    <md-content layout-gt-sm="column" layout-padding flex="100" ng-if="projectTaskLogger.logsArray.length === 0">
+        <h1>You Don't Have Any Logs for View</h1>
+    </md-content>
+    <md-content layout-gt-sm="column" layout-padding flex="100" ng-repeat="(key, logs) in projectTaskLogger.logsArray">
+        <md-list layout="column" layout-align="center" ng-cloak>
+            <md-list-item>
+                <table>
+                    <tr>
+                        <th>
+                            <span>{{logs.projectId.projectName}}</span>
+                        </th>
+                        <th>
+                            <span>{{logs.taskId.taskTitle}}</span>
+                        </th>
+                        <th>
+                            <span>{{logs.loggerType}}</span>
+                        </th>
+                        <th><span>{{logs.oldValue}}</span> to <span>{{logs.newValue}}</span></th>
+                        <th><span> by {{logs.changedBy.name}}</span></th>
+                    </tr>
+                </table>
+                <md-divider></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</md-content>

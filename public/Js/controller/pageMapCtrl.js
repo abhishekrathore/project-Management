@@ -1,8 +1,8 @@
 angular.module('projectDev')
     .controller('pageMapCtrl', pageMapCtrl);
-pageMapCtrl.$inject = ['$scope', 'serverRequestService', '$stateParams', '$state', '$mdDialog', '$mdSidenav'];
+pageMapCtrl.$inject = ['$scope', 'serverRequestService', '$stateParams', '$state', '$mdDialog', '$mdSidenav', 'PAGE_MAP_CTRL_API_OBJECT'];
 // Page Maps Controller
-function pageMapCtrl($scope, serverRequestService, $stateParams, $state, $mdDialog, $mdSidenav) {
+function pageMapCtrl($scope, serverRequestService, $stateParams, $state, $mdDialog, $mdSidenav, PAGE_MAP_CTRL_API_OBJECT) {
     if (!$stateParams.id) {
         $state.go('projectPanel');
     }
@@ -26,8 +26,8 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $state, $mdDial
     pageMap.getScreenDetail = _getScreenDetail;
     pageMap.showAddTaskPopup = _showAddTaskPopup;
     pageMap.toggleSideNav = _toggleSideNav;
-    serverRequestService.serverRequest('/checkProjectId/' + $stateParams.id, 'GET').then(_getMaxDate,serverRequestService.errorById);
-    serverRequestService.serverRequest('getActiveScreens/' + $stateParams.id, 'GET').then(_getActiveScreens, serverRequestService.errorById);
+    serverRequestService.serverRequest(PAGE_MAP_CTRL_API_OBJECT.checkProjectId + $stateParams.id, 'GET').then(_getMaxDate,serverRequestService.errorById);
+    serverRequestService.serverRequest(PAGE_MAP_CTRL_API_OBJECT.getActiveScreens + $stateParams.id, 'GET').then(_getActiveScreens, serverRequestService.errorById);
     $scope.$watch('screenForm', function(newVal) {
         if (newVal) {
             _renderNewScreen();
@@ -48,7 +48,7 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $state, $mdDial
     }
     // Upload New Screen Shoot
     function _uploadScreen() {
-        serverRequestService.upload(pageMap.screenImageVar, '/uploadDocs', 'doc').then(function(res) {
+        serverRequestService.upload(pageMap.screenImageVar, PAGE_MAP_CTRL_API_OBJECT.uploadDocs, 'doc').then(function(res) {
             if (res) {
                 pageMap.screenView.docId = res._id;
                 pageMap.screenView.docPath = res.docPath;
@@ -66,7 +66,7 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $state, $mdDial
         pageMap.activeButton[index] = 'dark-grey';
         pageMap.editIndex = index;
         pageMap.defaultActive = '';
-        serverRequestService.serverRequest('/getScreenDetail/' + pageMap.activeScreenArray[index]._id, 'GET').then(_getScreenDetailResponse);
+        serverRequestService.serverRequest(PAGE_MAP_CTRL_API_OBJECT.getScreenDetail + pageMap.activeScreenArray[index]._id, 'GET').then(_getScreenDetailResponse);
         _getTaskList(pageMap.activeScreenArray[index]._id);
     }
     // _getScreenDetailResponse
@@ -81,13 +81,13 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $state, $mdDial
     // Render New Screen
     function _saveScreenView() {
         if ($scope.screenForm.$valid && !pageMap.screenView._id) {
-            serverRequestService.serverRequest('saveScreen/', 'POST', pageMap.screenView).then(function(res) {
+            serverRequestService.serverRequest(PAGE_MAP_CTRL_API_OBJECT.saveScreen, 'POST', pageMap.screenView).then(function(res) {
                 serverRequestService.showNotification('success', 'Porject Screen Save successfully', 'Save', 2000);
                 pageMap.activeScreenArray.push(res.result);
                 _getScreenDetail(pageMap.activeScreenArray.length - 1);
             });
         } else if ($scope.screenForm.screenName.$valid && pageMap.screenView._id) {
-            serverRequestService.serverRequest('updateScreen/' + pageMap.screenView._id, 'PUT', pageMap.screenView).then(function(res) {
+            serverRequestService.serverRequest(PAGE_MAP_CTRL_API_OBJECT.updateScreen + pageMap.screenView._id, 'PUT', pageMap.screenView).then(function(res) {
                 serverRequestService.showNotification('success', 'Porject Screen Update successfully', 'Update', 2000);
                 pageMap.activeScreenArray[pageMap.editIndex] = pageMap.screenView;
                 pageMap.disableInput = true;
@@ -133,7 +133,7 @@ function pageMapCtrl($scope, serverRequestService, $stateParams, $state, $mdDial
 
     function _getTaskList(screenId) {
         var id = screenId;
-        serverRequestService.serverRequest('/getTaskByProjectOrScreenId/' + pageMap.screenView.projectId + '/' + screenId, 'GET').then(_getTaskByProjectOrScreenId);
+        serverRequestService.serverRequest(PAGE_MAP_CTRL_API_OBJECT.getTaskByProjectOrScreenId + pageMap.screenView.projectId + '/' + screenId, 'GET').then(_getTaskByProjectOrScreenId);
     }
 
     function _getTaskByProjectOrScreenId(res) {

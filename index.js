@@ -9,6 +9,7 @@ var express = require('express'), // require express code
     DocumentController = require('./Controller/DocumentController'), // require Controller code code
     PageMapsController = require('./Controller/PageMapsController'), // require Controller code code
     TaskController = require('./Controller/TaskController'), // require Controller code code
+    TaskLoggerController = require('./Controller/TaskLoggerController'), // require Controller code code
     session = require('express-session'), // require express-session code
     passport = require('passport'), // require passport js code code
     multer = require('multer'), // require multer code
@@ -130,6 +131,9 @@ app.get('/getUserByProjectId/:id', isAuthenticate, ProjectController.getUserByPr
 app.post('/saveTask', isAuthenticate, TaskController.saveTask);
 app.put('/editTask/:id', isAuthenticate, TaskController.editTask);
 app.get('/showTaskByProjectId/:projectId', isAuthenticate, TaskController.showTaskByProjectId);
+//Get Loogs 
+app.get('/getLogsOfTask', isAdminAuthenticate, TaskLoggerController.getLogsOfTask);
+
 // Check authenticate 
 app.get('/isAuthenticate', isAuthenticate, function(req, res) {
     var resultObj = {};

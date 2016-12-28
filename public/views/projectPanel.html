@@ -1,8 +1,9 @@
 <div project-header header-text="projectPanel.headerText" is-back="false"> </div>
 <md-content class="page-container">
-    <md-button class="md-raised md-primary" ng-click="projectPanel.showProrityProjectTaskView($event);">Show Task Panel</md-button>
+    <md-button class="md-raised md-primary" ui-sref="taskPrority()">Show Task Panel</md-button>
     <md-button class="md-raised md-primary" ng-if="projectPanel.editFlag" ng-click="projectPanel.showAddEditProjectPopup($event);">Add Project</md-button>
     <md-button ng-if="projectPanel.editFlag" class="md-raised md-primary" ng-click="projectPanel.toggleUserPanel('unAccessUserPanel');">Give Access to User</md-button>
+    <md-button class="md-raised md-primary" ng-if="projectPanel.editFlag" ui-sref="taskLogger()">Task Logs View</md-button>
     <md-content class="md-padding" layout-xs="row" layout="row">
         <div layout="row" flex="100">
             <md-card md-theme="altTheme" md-theme-watch ng-repeat="project in projectPanel.projectDataSource" flex="20">

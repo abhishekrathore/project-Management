@@ -1,4 +1,5 @@
 Task = require("../Model/Task"); // Require User Molel file
+var TaskLoggerController = require('../Controller/TaskLoggerController')
 //var mongoose = require("mongoose");
 var resultObj = {
         status: ''
@@ -79,24 +80,65 @@ function _saveTask(req, res) {
 // Update Task
 function _editTask(req, res) {
     var taskId = req.params.id;
-    Task.findByIdAndUpdate(taskId, {
-        $set: req.body
-    }, function(err, docs) {
-        if (err) {
-            resultObj.status = FAIL;
-            resultObj.result = err;
-            res.send(resultObj);
+    var diff = []
+    Task.findById(taskId, function(err, docs) {
+        if (docs) {
+            console.log(docs._id)
+            Object.keys(docs._doc).forEach(function(key) {
+                if (docs._doc.hasOwnProperty(key) && req.body.hasOwnProperty(key) && docs._doc[key] != req.body[key] && !(key === 'enddate' && new Date(req.body[key]).getTime() === docs._doc[key].getTime()) && !(key === 'developers' && JSON.stringify(req.body[key]) === JSON.stringify(docs._doc[key]))) {
+                    diff.push({
+                        screenId: docs._doc.screenId,
+                        projectId: docs._doc.projectId,
+                        loggerType: key,
+                        oldValue: docs._doc[key],
+                        newValue: req.body[key],
+                        changedBy : req.user[0]._id,
+                        taskId : docs._doc._id
+                    });
+                }
+            });
+            TaskLoggerController.saveLogs(diff);
+            Task.findByIdAndUpdate(taskId, {
+                $set: req.body
+            }, function(err, docs) {
+                if (err) {
+                    resultObj.status = FAIL;
+                    resultObj.result = err;
+                    res.send(resultObj);
+                } else {
+                    resultObj.status = OK;
+                    resultObj.result = docs;
+                    res.send(resultObj);
+                }
+            });
         } else {
-            resultObj.status = OK;
-            resultObj.result = docs;
+            resultObj.status = FAIL;
+            resultObj.result = err || 'Error in Find Task';
             res.send(resultObj);
         }
     });
+
 }
 
 // Show Task View 
 function _showTaskByProjectId(req, res) {
-    Task.find({ projectId: req.params.projectId }).sort({ enddate: 1, prority: -1 }).select({ '_id': '_id', 'taskTitle': 'taskTitle', 'phase': 'phase', 'prority': 'prority', 'enddate': 'enddate' }).exec(function(err, docs) {
+    var findObj = {
+        projectId: req.params.projectId
+    }
+    if (req.user && req.user[0].userrole !== 'Admin') {
+        findObj.developers = [req.user[0]._id];
+    }
+    Task.find(findObj).sort({
+        enddate: 1,
+        prority: -1
+    }).select({
+        '_id': '_id',
+        'taskTitle': 'taskTitle',
+        'phase': 'phase',
+        'prority': 'prority',
+        'enddate': 'enddate',
+        'developers': 'developers'
+    }).populate('developers').exec(function(err, docs) {
         if (err) {
             resultObj.status = FAIL;
             resultObj.result = err;
