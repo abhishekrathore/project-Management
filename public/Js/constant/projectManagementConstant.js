@@ -1,4 +1,4 @@
-angular.module('projectDev')
+angular.module('projectDev') 
 	.value('ADD_EDIT_PROJECT_CTRL_API_OBJECT', {
 		getDeveloperList : '/getDeveloperList',
 		getProjectDetailByProjectId : '/getProjectDetailByProjectId/',
