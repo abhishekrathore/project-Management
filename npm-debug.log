@@ -1,0 +1,151 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'googleapis',
+1 verbose cli   '--save' ]
+2 info using npm@3.10.10
+3 info using node@v6.10.0
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData googleapis
+8 silly fetchNamedPackageData googleapis
+9 silly mapToRegistry name googleapis
+10 silly mapToRegistry using default registry
+11 silly mapToRegistry registry https://registry.npmjs.org/
+12 silly mapToRegistry data Result {
+12 silly mapToRegistry   raw: 'googleapis',
+12 silly mapToRegistry   scope: null,
+12 silly mapToRegistry   escapedName: 'googleapis',
+12 silly mapToRegistry   name: 'googleapis',
+12 silly mapToRegistry   rawSpec: '',
+12 silly mapToRegistry   spec: 'latest',
+12 silly mapToRegistry   type: 'tag' }
+13 silly mapToRegistry uri https://registry.npmjs.org/googleapis
+14 verbose request uri https://registry.npmjs.org/googleapis
+15 verbose request no auth needed
+16 info attempt registry request try #1 at 2:47:38 PM
+17 verbose request id 61d366e8a926b46e
+18 verbose etag W/"58c353d1-36b2d"
+19 verbose lastModified Sat, 11 Mar 2017 01:33:05 GMT
+20 http request GET https://registry.npmjs.org/googleapis
+21 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+22 info attempt registry request try #2 at 2:48:00 PM
+23 verbose etag W/"58c353d1-36b2d"
+24 verbose lastModified Sat, 11 Mar 2017 01:33:05 GMT
+25 http request GET https://registry.npmjs.org/googleapis
+26 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+27 info attempt registry request try #3 at 2:49:12 PM
+28 verbose etag W/"58c353d1-36b2d"
+29 verbose lastModified Sat, 11 Mar 2017 01:33:05 GMT
+30 http request GET https://registry.npmjs.org/googleapis
+31 silly get cb [ 304, undefined ]
+32 verbose etag https://registry.npmjs.org/googleapis from cache
+33 verbose get saving googleapis to C:\Users\pawan\AppData\Roaming\npm-cache\registry.npmjs.org\googleapis\.cache.json
+34 verbose correctMkdir C:\Users\pawan\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+35 silly install normalizeTree
+36 silly loadCurrentTree Finishing
+37 silly loadIdealTree Starting
+38 silly install loadIdealTree
+39 silly cloneCurrentTree Starting
+40 silly install cloneCurrentTreeToIdealTree
+41 silly cloneCurrentTree Finishing
+42 silly loadShrinkwrap Starting
+43 silly install loadShrinkwrap
+44 silly loadShrinkwrap Finishing
+45 silly loadAllDepsIntoIdealTree Starting
+46 silly install loadAllDepsIntoIdealTree
+47 silly resolveWithNewModule googleapis@18.0.0 checking installable status
+48 silly cache add args [ 'googleapis', null ]
+49 verbose cache add spec googleapis
+50 silly cache add parsed spec Result {
+50 silly cache add   raw: 'googleapis',
+50 silly cache add   scope: null,
+50 silly cache add   escapedName: 'googleapis',
+50 silly cache add   name: 'googleapis',
+50 silly cache add   rawSpec: '',
+50 silly cache add   spec: 'latest',
+50 silly cache add   type: 'tag' }
+51 silly addNamed googleapis@latest
+52 verbose addNamed "latest" is being treated as a dist-tag for googleapis
+53 info addNameTag [ 'googleapis', 'latest' ]
+54 silly mapToRegistry name googleapis
+55 silly mapToRegistry using default registry
+56 silly mapToRegistry registry https://registry.npmjs.org/
+57 silly mapToRegistry data Result {
+57 silly mapToRegistry   raw: 'googleapis',
+57 silly mapToRegistry   scope: null,
+57 silly mapToRegistry   escapedName: 'googleapis',
+57 silly mapToRegistry   name: 'googleapis',
+57 silly mapToRegistry   rawSpec: '',
+57 silly mapToRegistry   spec: 'latest',
+57 silly mapToRegistry   type: 'tag' }
+58 silly mapToRegistry uri https://registry.npmjs.org/googleapis
+59 verbose addNameTag registry:https://registry.npmjs.org/googleapis not in flight; fetching
+60 verbose get https://registry.npmjs.org/googleapis not expired, no request
+61 silly addNameTag next cb for googleapis with tag latest
+62 silly addNamed googleapis@18.0.0
+63 verbose addNamed "18.0.0" is a plain semver version for googleapis
+64 silly mapToRegistry name googleapis
+65 silly mapToRegistry using default registry
+66 silly mapToRegistry registry https://registry.npmjs.org/
+67 silly mapToRegistry data Result {
+67 silly mapToRegistry   raw: 'googleapis',
+67 silly mapToRegistry   scope: null,
+67 silly mapToRegistry   escapedName: 'googleapis',
+67 silly mapToRegistry   name: 'googleapis',
+67 silly mapToRegistry   rawSpec: '',
+67 silly mapToRegistry   spec: 'latest',
+67 silly mapToRegistry   type: 'tag' }
+68 silly mapToRegistry uri https://registry.npmjs.org/googleapis
+69 verbose addRemoteTarball https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz not in flight; adding
+70 verbose addRemoteTarball [ 'https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz',
+70 verbose addRemoteTarball   '76c7c8b7e3fadb61eac44389a9beaee9240ddf01' ]
+71 info retry fetch attempt 1 at 2:49:24 PM
+72 info attempt registry request try #1 at 2:49:24 PM
+73 http fetch GET https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz
+74 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+75 info attempt registry request try #2 at 2:49:46 PM
+76 http fetch GET https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz
+77 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+78 info attempt registry request try #3 at 2:50:58 PM
+79 http fetch GET https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz
+80 error fetch failed https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz
+81 warn retry will retry, error on last attempt: Error: getaddrinfo EAI_AGAIN registry.npmjs.org:443
+82 info retry fetch attempt 2 at 2:51:12 PM
+83 info attempt registry request try #1 at 2:51:12 PM
+84 http fetch GET https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz
+85 info retry will retry, error on last attempt: Error: getaddrinfo EAI_AGAIN registry.npmjs.org:443
+86 info attempt registry request try #2 at 2:51:29 PM
+87 http fetch GET https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz
+88 http fetch 200 https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz
+89 info retry will retry, error on last attempt: Error: read ECONNRESET
+90 silly fetchAndShaCheck shasum 76c7c8b7e3fadb61eac44389a9beaee9240ddf01
+91 silly rollbackFailedOptional Starting
+92 silly rollbackFailedOptional Finishing
+93 silly runTopLevelLifecycles Finishing
+94 silly install printInstalled
+95 verbose stack Error: shasum check failed for C:\Users\pawan\AppData\Local\Temp\npm-13832-ec2e8272\registry.npmjs.org\googleapis\-\googleapis-18.0.0.tgz
+95 verbose stack Expected: 76c7c8b7e3fadb61eac44389a9beaee9240ddf01
+95 verbose stack Actual:   391f1781202be10bc917c466db447684199ad76a
+95 verbose stack From:     https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz
+95 verbose stack     at C:\Program Files\nodejs\node_modules\npm\node_modules\sha\index.js:25:8
+95 verbose stack     at ReadStream.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\sha\index.js:72:7)
+95 verbose stack     at emitNone (events.js:91:20)
+95 verbose stack     at ReadStream.emit (events.js:185:7)
+95 verbose stack     at endReadableNT (_stream_readable.js:974:12)
+95 verbose stack     at _combinedTickCallback (internal/process/next_tick.js:74:11)
+95 verbose stack     at process._tickCallback (internal/process/next_tick.js:98:9)
+96 verbose cwd D:\Shubh\WebProject\NodeJs\MyNodeApp\ProjectOnGit
+97 error Windows_NT 10.0.14393
+98 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "googleapis" "--save"
+99 error node v6.10.0
+100 error npm  v3.10.10
+101 error shasum check failed for C:\Users\pawan\AppData\Local\Temp\npm-13832-ec2e8272\registry.npmjs.org\googleapis\-\googleapis-18.0.0.tgz
+101 error Expected: 76c7c8b7e3fadb61eac44389a9beaee9240ddf01
+101 error Actual:   391f1781202be10bc917c466db447684199ad76a
+101 error From:     https://registry.npmjs.org/googleapis/-/googleapis-18.0.0.tgz
+102 error If you need help, you may report this error at:
+102 error     <https://github.com/npm/npm/issues>
+103 verbose exit [ 1, true ]

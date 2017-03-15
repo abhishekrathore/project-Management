@@ -110,7 +110,7 @@ app.get('/getUserWithoutAccess', isAdminAuthenticate, UserController.getUserWith
 app.get('/giveAccessToUser', isAdminAuthenticate, UserController.giveAccessToUser);
 app.get('/getDeveloperList', isAdminAuthenticate, UserController.getDeveloperList);
 app.get('/giveUserDetail', isAuthenticate, UserController.giveUserDetail)
-    // Project Collections Apis
+// Project Collections Apis
 app.post('/createNewProject', isAdminAuthenticate, ProjectController.createNewProject);
 app.get('/getProjectDetailByProjectId/:id', isAuthenticate, ProjectController.getProjectDetailByProjectId);
 app.put('/editProjectDetail/:id', isAdminAuthenticate, ProjectController.editProjectDetail);
@@ -133,7 +133,6 @@ app.put('/editTask/:id', isAuthenticate, TaskController.editTask);
 app.get('/showTaskByProjectId/:projectId', isAuthenticate, TaskController.showTaskByProjectId);
 //Get Loogs 
 app.get('/getLogsOfTask', isAdminAuthenticate, TaskLoggerController.getLogsOfTask);
-
 // Check authenticate 
 app.get('/isAuthenticate', isAuthenticate, function(req, res) {
     var resultObj = {};
@@ -145,8 +144,6 @@ app.get('/isAuthenticate', isAuthenticate, function(req, res) {
     };
     res.send(resultObj);
 });
-
-
 // For Check Start Server function
 app.listen(PORT, function() {
     console.log('Server Started In Rest Api on port ' + PORT);
@@ -186,3 +183,22 @@ function isAdminAuthenticate(req, res, done) {
         res.send(resultObj)
     }
 }
+
+// Google Plus Apis Access
+var google = require('googleapis');
+var urlshortener = google.urlshortener('v1');
+
+var params = {
+  shortUrl: 'http://goo.gl/xKbRu3'
+};
+
+// get the long url of a shortened url
+urlshortener.url.get(params, function (err, response) {
+  if (err) {
+    console.log('Encountered error', err);
+  } else {
+    console.log('Long url is', response.longUrl);
+  }
+});
+
+
