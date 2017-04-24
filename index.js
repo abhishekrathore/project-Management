@@ -64,7 +64,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 // use passport Google Strategy  use middle ware with middle ware
 passport.use(new GoogleStrategy({
         clientID: '702764497550-f0vmbk5bsttbepk8q1ggghee7g97ml82.apps.googleusercontent.com',
-        clientSecret: 'nrfz96U5sULdBx9E1KEu4Mnn',
+        clientSecret: 'nrfz96U5sULdBx9E1KEu4Mnn', 
         callbackURL: process.env.GOOGLE_CB || "http://localhost:8080/userLoginCallback",
         passReqToCallback: true
     },
