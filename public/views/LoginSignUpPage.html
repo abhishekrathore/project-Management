@@ -17,7 +17,7 @@
                 <div flex="flex"></div>
                 <md-button href="" md-no-ink="md-no-ink">Forgot Password</md-button>
             </div>
-            <md-button ng-click="loginView.OpenPopupWindow()" class="md-fab md-accent" aria-label="Google Sign In">
+            <md-button ng-click="loginView.OpenPopupWindow(); ga('send', 'event', 'login', 'loginEevent', 'Login')" class="md-fab md-accent" aria-label="Google Sign In">
                 <md-icon md-svg-icon="images/icons/1482224570_80-google-plus.svg">
                     <md-tooltip md-visible="" md-direction="">
                         Google Sing In
