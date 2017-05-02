@@ -39,10 +39,12 @@
   ga('create', 'UA-97986806-1', 'auto');
   ga('send', 'pageview');
   if(!localStorage.getItem('userClientId')) {
+    alert('o')
     var randomNumber = (Math.floor(100000 + Math.random() * 900000)).toString();
     localStorage.setItem('userClientId', randomNumber);
-    ga('send', 'event', 'onload', localStorage.getItem('userClientId'));
+    ga('send', 'event', 'onload', randomNumber);
   } else {
+    alert('op')
     ga('send', 'event', 'onload', localStorage.getItem('userClientId'));
   }
 </script>
