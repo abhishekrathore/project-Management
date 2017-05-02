@@ -41,6 +41,7 @@
   if(!localStorage.getItem('userClientId')) {
     var randomNumber = (Math.floor(100000 + Math.random() * 900000)).toString();
     localStorage.setItem('userClientId', randomNumber);
+    ga('send', 'event', 'onload', localStorage.getItem('userClientId'));
   } else {
     ga('send', 'event', 'onload', localStorage.getItem('userClientId'));
   }
