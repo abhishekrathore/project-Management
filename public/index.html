@@ -39,7 +39,8 @@
 
   ga('create', 'UA-97986806-1', 'auto');
   ga('send', 'pageview');
-  ga('send', 'event', 'onload', new Date());
+  var randomNumber = (Math.floor(100000 + Math.random() * 900000)).toString();
+  ga('send', 'event', 'onload', randomNumber);
 </script>
     <!-- End Google Analytics -->
     <!--<script>
