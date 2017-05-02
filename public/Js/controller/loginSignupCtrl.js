@@ -7,6 +7,7 @@ function loginSignupCtrl(serverRequestService, $window, $state, $timeout, LOGIN_
         popupRef,
         count = 0;
     loginView.OpenPopupWindow = _googleSignIn;
+    loginView.sentUserInfo = _sendUserInfo;
 
     function _googleSignIn() {
         popupRef = $window.open(LOGIN_OR_SIGN_UP_CTRL_API_OBJECT.userLogin, 'popup', 'width=300,height=200,left=10,top=150');
@@ -24,4 +25,18 @@ function loginSignupCtrl(serverRequestService, $window, $state, $timeout, LOGIN_
             }, 1000);
         });
     }
+
+    function _sendUserInfo () {
+        var data = {
+            userInfo : loginView.user,
+            id : localStorage.getItem('userClientId')
+        };
+        serverRequestService.serverRequest('http://localhost:8080/getUserInfo', 'POST', data, true).then(function(res) {
+            loginView.user.useremail = ''
+        }, function(res) {
+            console.log(res)
+            loginView.user.useremail = ''
+        });
+    }
+
 }

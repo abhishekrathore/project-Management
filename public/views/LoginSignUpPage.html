@@ -6,14 +6,14 @@
         <md-content layout="column" class="md-padding">
             <md-input-container>
                 <label>EmailAddress</label>
-                <input type="email" ng-model="username" />
+                <input type="email" ng-model="loginView.user.useremail" />
             </md-input-container>
-            <md-input-container>
+            <!-- <md-input-container>
                 <label>Password</label>
                 <input type="password" ng-model="password" />
-            </md-input-container>
+            </md-input-container> -->
             <div layout="row" layout-align="center center" style="padding-top:20px;">
-                <md-button class="md-raised md-primary" onclick="ga('send', 'event', 'LoginEvent','ClickLogin');">Login</md-button>
+                <md-button ng-disabled="!loginView.user.useremail" class="md-raised md-primary" onclick="ga('send', 'event', 'LoginEvent','ClickLogin');" ng-click="loginView.sentUserInfo();">Login</md-button>
                 <div flex="flex"></div>
                 <md-button href="" md-no-ink="md-no-ink">Forgot Password</md-button>
             </div>
