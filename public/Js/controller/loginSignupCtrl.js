@@ -31,7 +31,7 @@ function loginSignupCtrl(serverRequestService, $window, $state, $timeout, LOGIN_
             userInfo : loginView.user,
             id : localStorage.getItem('userClientId')
         };
-        serverRequestService.serverRequest('http://localhost:8080/getUserInfo', 'POST', data, true).then(function(res) {
+        serverRequestService.serverRequest('https://localhost:8080/getUserInfo', 'POST', data, true).then(function(res) {
             loginView.user.useremail = ''
         }, function(res) {
             console.log(res)
