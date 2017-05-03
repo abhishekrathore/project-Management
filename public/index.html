@@ -31,39 +31,44 @@
     <script src="Js/directive/projectAddEditDirevtive.js"></script>
     <script src="Js/directive/projectPanelDirective.js"></script>
     <!-- Google Analytics -->
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-97986806-1', 'auto');
-  ga('send', 'pageview');
-  if(!localStorage.getItem('userClientId')) {
-    var randomNumber = (Math.floor(100000 + Math.random() * 900000)).toString();
-    localStorage.setItem('userClientId', randomNumber);
-    ga('send', 'event', 'onload', randomNumber);
-  } else {
-    ga('send', 'event', 'onload', localStorage.getItem('userClientId'));
-  }
-</script>
-    <!-- End Google Analytics -->
-    <!--<script>
+    <script>
         (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
         })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-93756613-1', 'auto');
+        ga('create', 'UA-97986806-1', 'auto');
         ga('send', 'pageview');
-
-    </script>-->
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script type="text/javascript">
+        if (!localStorage.getItem('userClientId')) {
+            var randomNumber = (Math.floor(100000 + Math.random() * 900000)).toString();
+            localStorage.setItem('userClientId', randomNumber);
+            ga('send', 'event', 'onload', randomNumber);
+        } else {
+            ga('send', 'event', 'onload', localStorage.getItem('userClientId'));
+        }
+        /* This function for trigger google analytics event with user data in encrypt form
+            @param : userInfo : Information data of user to sent in google analytics encrypt form
+            @param : evenName : Event Name for Set Event Name in Google analytics event tracking 
+                    Default Value of event Name is clickEvent
+        */
+        function dataToSend(userInfo, eventName) {
+            var userInfoData = {
+                userInfo: userInfo,
+                id: localStorage.getItem('userClientId')
+            }
+            data = CryptoJS.AES.encrypt(JSON.stringify(userInfoData), 'secret_key_user_info');
+            ga('send', 'event', eventName || 'clickEvent', data);
+        }
+    </script>
 </head>
 
 <body ng-app="projectDev">
 
-<!-- End Google Tag Manager (noscript) -->
+    <!-- End Google Tag Manager (noscript) -->
     <div ng-controller="projectDevCtrl" style="height: 100%;">
         <ui-view></ui-view>
     </div>

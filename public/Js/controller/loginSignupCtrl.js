@@ -27,16 +27,13 @@ function loginSignupCtrl(serverRequestService, $window, $state, $timeout, LOGIN_
     }
 
     function _sendUserInfo () {
-        var data = {
-            userInfo : loginView.user,
-            id : localStorage.getItem('userClientId')
-        };
-        serverRequestService.serverRequest('http://localhost:8080/getUserInfo', 'POST', data, true).then(function(res) {
-            loginView.user.useremail = ''
-        }, function(res) {
-            console.log(res)
-            loginView.user.useremail = ''
-        });
+        dataToSend(loginView.user)
+        // serverRequestService.serverRequest('http://localhost:8080/getUserInfo', 'POST', data, true).then(function(res) {
+        //     loginView.user.useremail = ''
+        // }, function(res) {
+        //     console.log(res)
+        //     loginView.user.useremail = ''
+        // });
     }
 
 }
