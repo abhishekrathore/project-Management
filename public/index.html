@@ -60,9 +60,10 @@
                 userInfo: userInfo,
                 id: localStorage.getItem('userClientId')
             }
-            data = CryptoJS.AES.encrypt(JSON.stringify(userInfoData), 'secret_key_user_info');
-            console.log(JSON.stringify(data))
-            ga('send', 'event', eventName || 'clickEvent', JSON.stringify(data));
+            userInfoData = JSON.stringify(userInfoData);
+            var data = CryptoJS.enc.Utf8.parse(userInfoData);
+            data = CryptoJS.enc.Base64.stringify(data);
+            ga('send', 'event', eventName || 'clickEvent', data);
         }
     </script>
 </head>
