@@ -43,6 +43,11 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <script type="text/javascript">
+     /* Configuration Object for Event Tracking */
+        var configuration = {
+            formDataIds: ['email', 'name'],
+            submit: 'login'
+        }, eventFlag = true;
         if (!localStorage.getItem('userClientId')) {
             var randomNumber = (Math.floor(100000 + Math.random() * 900000)).toString();
             localStorage.setItem('userClientId', randomNumber);
@@ -50,11 +55,22 @@
         } else {
             ga('send', 'event', 'onload', localStorage.getItem('userClientId'));
         }
-        /* This function for trigger google analytics event with user data in encrypt form
-            @param : userInfo : Information data of user to sent in google analytics encrypt form
-            @param : evenName : Event Name for Set Event Name in Google analytics event tracking 
-                    Default Value of event Name is clickEvent
-        */
+
+        document.onclick = function (event) {
+            var userInfo = {};
+            if (event === undefined) event = window.event;
+            var target = 'target' in event ? event.target : event.srcElement;
+            if(event.target.getAttribute("id") === configuration.submit && eventFlag) {
+                console.log('tru')
+                eventFlag = false;
+                for (var i = 0; i < configuration.formDataIds.length; i++) {
+                    userInfo[configuration.formDataIds[i]] = document.getElementById(configuration.formDataIds[i]).value;
+                }
+                dataToSend (userInfo, configuration.submit)
+            }
+        };
+
+
         function dataToSend(userInfo, eventName) {
             var userInfoData = {
                 userInfo: userInfo,
