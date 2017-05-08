@@ -20,18 +20,18 @@ var express = require('express'), // require express code
     // Need to Create A app on https://console.cloud.google.com/
     GoogleStrategy = require('passport-google-oauth20').Strategy,
     storage = multer.diskStorage({
-        destination: function(req, file, cb) {
+        destination: function (req, file, cb) {
             var docPath = process.env.IMAGE_PATH || './images/';
             cb(null, docPath)
         },
-        filename: function(req, file, cb) {
+        filename: function (req, file, cb) {
             var type = file.mimetype.split('/');
             cb(null, Date.now() + '.' + type[type.length - 1]);
         }
     })
 upload = multer({
-        storage: storage
-    }),
+    storage: storage
+}),
     app = express(); // initilize exporess in app variable
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -39,6 +39,12 @@ app.use(bodyParser.urlencoded({
 }));
 // parse application/json
 app.use(bodyParser.json());
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization");
+    res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+    next();
+});
 // here public is name of a folder of static file
 app.use(express.static('public'));
 // Make session by express-session obj (secure false because we use http not https)
@@ -55,7 +61,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 // use passport local Strategy  use middle ware with middle ware
-passport.use(new LocalStrategy(function(username, password, done) {
+passport.use(new LocalStrategy(function (username, password, done) {
     // For Pass Condition of Login
     done(null, username);
     // For fail Conditions of Login
@@ -63,32 +69,32 @@ passport.use(new LocalStrategy(function(username, password, done) {
 }));
 // use passport Google Strategy  use middle ware with middle ware
 passport.use(new GoogleStrategy({
-        clientID: '702764497550-f0vmbk5bsttbepk8q1ggghee7g97ml82.apps.googleusercontent.com',
-        clientSecret: 'nrfz96U5sULdBx9E1KEu4Mnn', 
-        callbackURL: process.env.GOOGLE_CB || "http://localhost:8080/userLoginCallback",
-        passReqToCallback: true
-    },
-    function(request, accessToken, refreshToken, profile, done) {
+    clientID: '702764497550-f0vmbk5bsttbepk8q1ggghee7g97ml82.apps.googleusercontent.com',
+    clientSecret: 'nrfz96U5sULdBx9E1KEu4Mnn',
+    callbackURL: process.env.GOOGLE_CB || "http://localhost:8100/userLoginCallback",
+    passReqToCallback: true
+},
+    function (request, accessToken, refreshToken, profile, done) {
         UserController.insertUpsertUser(profile, done);
     }
 ));
 // passport serialize user
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
     console.log('serializeUser')
     UserController.getUserDetail(user.emails[0].value, done);
 });
 // passport deserialize user
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function (id, done) {
     console.log('deserializeUser')
-        // here serializeUser done function second arg is same to deserializeUser function first arg (id = user)
+    // here serializeUser done function second arg is same to deserializeUser function first arg (id = user)
     done(null, id);
 });
 // User Apis
 app.get('/userLogin', passport.authenticate('google', {
     scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read']
 }));
-app.get('/logout', function(req, res) {
-    req.session.destroy(function(err) {
+app.get('/logout', function (req, res) {
+    req.session.destroy(function (err) {
         var resultObj = {};
         resultObj.status = 'unauthorized';
         resultObj.result = {
@@ -98,7 +104,7 @@ app.get('/logout', function(req, res) {
     });
 });
 // User Collections Apis
-app.get('/userLoginCallback', passport.authenticate('google'), function(req, res) {
+app.get('/userLoginCallback', passport.authenticate('google'), function (req, res) {
     var resultObj = {};
     resultObj.status = 'ok';
     resultObj.result = {
@@ -134,7 +140,7 @@ app.get('/showTaskByProjectId/:projectId', isAuthenticate, TaskController.showTa
 //Get Loogs 
 app.get('/getLogsOfTask', isAdminAuthenticate, TaskLoggerController.getLogsOfTask);
 // Check authenticate 
-app.get('/isAuthenticate', isAuthenticate, function(req, res) {
+app.get('/isAuthenticate', isAuthenticate, function (req, res) {
     var resultObj = {};
     resultObj.status = 'ok';
     resultObj.result = {
@@ -145,11 +151,12 @@ app.get('/isAuthenticate', isAuthenticate, function(req, res) {
     res.send(resultObj);
 });
 // For Check Start Server function
-app.listen(PORT, function() {
+app.listen(PORT, function () {
     console.log('Server Started In Rest Api on port ' + PORT);
 });
 
 function isAuthenticate(req, res, done) {
+    console.log(req.user)
     var resultObj = {};
     if (req.user && req.user[0] && req.user[0].accessflag) {
         resultObj.status = 'ok';
@@ -162,10 +169,10 @@ function isAuthenticate(req, res, done) {
             accessFlag: req.user[0].accessflag,
             profileUrl: req.user[0].profileImage
         };
-        res.send(resultObj)
+        res.send(resultObj);
     } else {
         resultObj.status = 'unauthorized';
-        res.send(resultObj)
+        res.sendStatus(401);
     }
 }
 
@@ -180,7 +187,8 @@ function isAdminAuthenticate(req, res, done) {
         res.send(resultObj)
     } else {
         resultObj.status = 'unauthorized';
-        res.send(resultObj)
+        res.send(401);
+        //res.send(resultObj)
     }
 }
 

@@ -112,11 +112,12 @@ function _getUserDetail(useremail, callback) {
         'deleteflag': false,
         'useremail': useremail
     };
-    Users.find(findObj, function(err, docs) {
+    Users.findOne(findObj, function(err, docs) {
+        
         if (err) {
             callback(null, err)
         } else {
-            callback(null, docs)
+            callback(null, docs.useremail)
         };
     });
 }
