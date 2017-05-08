@@ -13,6 +13,7 @@ var express = require('express'), // require express code
     session = require('express-session'), // require express-session code
     passport = require('passport'), // require passport js code code
     multer = require('multer'), // require multer code
+    cookieParser = require('cookie-parser'),
     // install npm install passport-local --save (for install local strategy)
     LocalStrategy = require('passport-local').Strategy,
     PORT = process.env.PORT || 8100,
@@ -37,6 +38,7 @@ upload = multer({
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+app.use(cookieParser());
 // parse application/json
 app.use(bodyParser.json());
 app.use(function(req, res, next) {
