@@ -57,7 +57,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         path: '/',
-        domain: 'http://localhost:3000',
+        domain: 'https://obscure-springs-26671.herokuapp.com',
         maxAge: 1000 * 60 * 24 // 24 hours
     }
 }));
